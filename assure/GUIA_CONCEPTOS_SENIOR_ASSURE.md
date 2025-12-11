@@ -768,3 +768,4 @@ ORDER BY created_at DESC;
 
 *Esta guía cubre los conceptos fundamentales para el examen Senior en AssureSoft. Estudia cada sección en profundidad y practica con ejemplos reales.*
 
+
