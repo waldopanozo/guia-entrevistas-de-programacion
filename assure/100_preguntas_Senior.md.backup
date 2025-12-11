@@ -1,0 +1,1251 @@
+# 100 Preguntas y Respuestas - Senior Software Engineer
+
+## Continuous Integration & Delivery
+
+### 1. ¿Cómo configurarías un servidor de CI desde cero?
+**Respuesta:** 
+1. Elegir herramienta (Jenkins, GitLab CI, GitHub Actions)
+2. Configurar servidor/build agent
+3. Conectar con repositorio de código
+4. Crear pipeline básico:
+   - Checkout código
+   - Instalar dependencias
+   - Build
+   - Tests
+   - Deploy
+5. Configurar notificaciones
+6. Integrar con herramientas de calidad de código
+7. Configurar secrets y variables de entorno
+8. Documentar proceso
+
+### 2. ¿Cómo integrarías Docker en un pipeline de CI?
+**Respuesta:** 
+- Usar imágenes Docker para builds consistentes
+- Multi-stage builds para optimizar
+- Docker-in-Docker si es necesario
+- Cache de layers de Docker
+- Ejecutar tests en contenedores
+- Build y push de imágenes a registry
+- Usar Docker Compose para servicios dependientes
+
+**Ejemplo GitLab CI**:
+```yaml
+build:
+  script:
+    - docker build -t app:latest .
+    - docker run app:latest npm test
+```
+
+### 3. ¿Cómo configurarías un pipeline de CD completo?
+**Respuesta:** 
+1. **Stages**: Build → Test → Deploy Staging → Deploy Production
+2. **Jobs en cada stage**:
+   - Build: Compilar, crear artefactos
+   - Test: Unit, integration, e2e tests
+   - Deploy Staging: Desplegar a ambiente de prueba
+   - Deploy Production: Con aprobación manual
+3. **Gates**: Tests deben pasar, code review aprobado
+4. **Rollback**: Automático si health check falla
+5. **Notificaciones**: Slack, email en cada etapa
+6. **Artifacts**: Guardar builds para rollback
+
+### 4. ¿Qué estrategias de despliegue implementarías y cuándo?
+**Respuesta:** 
+- **Blue-Green**: Dos ambientes idénticos, cambiar tráfico instantáneamente. Para cero downtime crítico
+- **Canary**: Desplegar a pequeño porcentaje primero. Para validar en producción gradualmente
+- **Rolling**: Actualizar instancias gradualmente. Para servicios con múltiples instancias
+- **Feature Flags**: Activar features gradualmente. Para control de lanzamiento de features
+
+**Elegir según**: Criticidad, tamaño de equipo, infraestructura disponible
+
+### 5. ¿Cómo manejarías secrets y configuración en CI/CD?
+**Respuesta:** 
+- Usar secret management (AWS Secrets Manager, HashiCorp Vault)
+- Variables de entorno en CI/CD tool (encriptadas)
+- No commitear secrets en código
+- Rotación de secrets regularmente
+- Diferentes secrets por ambiente
+- Acceso basado en roles
+- Audit logging de acceso a secrets
+
+### 6. ¿Cómo optimizarías un pipeline de CI lento?
+**Respuesta:** 
+- Paralelizar jobs independientes
+- Cache de dependencias (npm, maven, etc.)
+- Cache de Docker layers
+- Ejecutar solo tests afectados (test impact analysis)
+- Usar runners más rápidos
+- Optimizar Dockerfiles (multi-stage, orden de layers)
+- Ejecutar tests en paralelo
+- Skip stages innecesarias en feature branches
+
+### 7. ¿Cómo implementarías rollback automático en CD?
+**Respuesta:** 
+1. Health checks después de deploy
+2. Si health check falla después de X minutos:
+   - Automáticamente desplegar versión anterior
+   - Notificar al equipo
+   - Crear incident
+3. Mantener últimas N versiones disponibles
+4. Scripts de rollback automatizados
+5. Monitoreo continuo post-deploy
+
+---
+
+## Databases - Advanced Topics
+
+### 8. ¿Qué es Big Data y qué tecnologías usarías?
+**Respuesta:** Big Data son datos que exceden capacidad de procesamiento tradicional. Tecnologías:
+- **Hadoop**: Procesamiento distribuido (HDFS, MapReduce)
+- **Spark**: Procesamiento en memoria, más rápido
+- **Kafka**: Streaming de datos
+- **Cassandra/HBase**: Bases de datos distribuidas
+- **Elasticsearch**: Búsqueda y análisis
+
+**Casos de uso**: Analytics, machine learning, IoT, logs masivos
+
+### 9. ¿Cómo configurarías replicación de base de datos Master-Slave?
+**Respuesta:** 
+1. Configurar Master: Habilitar binary logging
+2. Configurar Slave: Apuntar a Master
+3. Configurar replication user con permisos
+4. Iniciar replicación desde punto específico o snapshot
+5. Monitorear lag de replicación
+6. Configurar failover automático si es necesario
+7. Backup desde Slave para no afectar Master
+
+**Beneficios**: Lecturas distribuidas, backup sin impacto, alta disponibilidad
+
+### 10. ¿Qué es un Data Warehouse y cómo lo diseñarías?
+**Respuesta:** Data Warehouse es almacén centralizado de datos para análisis. Diseño:
+- **ETL Process**: Extract (de fuentes), Transform (limpiar, normalizar), Load (a warehouse)
+- **Dimensional Modeling**: 
+  - **Star Schema**: Fact table + dimension tables
+  - **Snowflake Schema**: Dimensiones normalizadas
+- **OLAP vs OLTP**: Optimizado para análisis, no transacciones
+- **Data Marts**: Subconjuntos por departamento
+
+**Herramientas**: Redshift, BigQuery, Snowflake
+
+### 11. ¿Cómo optimizarías una consulta SQL compleja con execution plan?
+**Respuesta:** 
+1. Ejecutar `EXPLAIN ANALYZE` para ver plan real
+2. Identificar operaciones costosas:
+   - Table scans (buscar sin índices)
+   - Sorts costosos
+   - Nested loops en lugar de hash joins
+3. Crear índices apropiados:
+   - En columnas de WHERE
+   - En columnas de JOIN
+   - Índices compuestos para queries específicas
+4. Optimizar JOINs:
+   - Orden correcto (tabla pequeña primero)
+   - Usar índices en columnas de JOIN
+5. Considerar particionamiento si es tabla grande
+6. Reescribir query si es necesario (subqueries vs JOINs)
+7. Actualizar estadísticas de tabla
+
+### 12. ¿Cuándo crearías un índice compuesto y cómo decidirías el orden?
+**Respuesta:** Crear índice compuesto cuando queries filtran por múltiples columnas. Orden:
+- Columna más selectiva primero (menos valores únicos)
+- Columnas usadas en WHERE antes que ORDER BY
+- Considerar queries más frecuentes
+
+**Ejemplo**: Si queries filtran por `category` y luego ordenan por `date`:
+```sql
+CREATE INDEX idx_category_date ON products(category, date);
+```
+
+**Regla**: Leftmost prefix - índice puede usarse si query usa columnas desde izquierda
+
+### 13. ¿Qué es Data Mining y qué técnicas conoces?
+**Respuesta:** Data Mining es extracción de patrones de grandes conjuntos de datos. Técnicas:
+- **Clustering**: Agrupar datos similares (K-means)
+- **Classification**: Clasificar en categorías (Decision Trees, SVM)
+- **Association Rules**: Encontrar relaciones (Market Basket Analysis)
+- **Regression**: Predecir valores numéricos
+- **Anomaly Detection**: Detectar outliers
+
+**Aplicaciones**: Marketing, fraud detection, recomendaciones, análisis predictivo
+
+### 14. ¿Cómo manejarías replicación Master-Master y sus conflictos?
+**Respuesta:** Master-Master permite escritura en ambos servidores. Manejo de conflictos:
+- **Conflict Resolution**: 
+  - Timestamp-based (último gana)
+  - Application-level (lógica de negocio)
+  - Manual resolution
+- **Partitioning**: Dividir datos por región/usuario
+- **Synchronous vs Asynchronous**: Trade-off entre consistencia y performance
+- **Monitoring**: Detectar y alertar sobre conflictos
+- **Testing**: Probar escenarios de conflicto
+
+**Desafíos**: Más complejo que Master-Slave, requiere cuidado en diseño
+
+---
+
+## Object Oriented Programming - Advanced
+
+### 15. ¿Cómo diseñarías un framework reutilizable que cumpla SOLID?
+**Respuesta:** 
+- **Single Responsibility**: Cada módulo tiene responsabilidad única
+- **Open/Closed**: Extension points mediante interfaces/abstracciones
+- **Liskov Substitution**: Interfaces bien definidas, implementaciones intercambiables
+- **Interface Segregation**: Interfaces pequeñas y específicas
+- **Dependency Inversion**: Framework depende de abstracciones, no implementaciones
+
+**Ejemplo**: Framework de logging con interfaces `ILogger`, `IAppender`, extensible sin modificar código base
+
+### 16. ¿Cómo combinarías múltiples design patterns en un sistema?
+**Respuesta:** 
+- **Factory + Strategy**: Factory crea estrategias según contexto
+- **Observer + Command**: Commands como eventos observables
+- **Repository + Unit of Work**: Repository con UoW para transacciones
+- **Facade + Adapter**: Facade simplifica, Adapter integra sistemas externos
+- **Decorator + Strategy**: Decoradores que cambian estrategia
+
+**Consideraciones**: 
+- No sobre-ingeniería
+- Mantener simplicidad
+- Documentar decisiones
+- Entender trade-offs
+
+### 17. ¿Cuándo NO usarías un design pattern?
+**Respuesta:** 
+- Cuando añade complejidad innecesaria
+- Para problemas simples que no requieren patrón
+- Cuando el patrón no resuelve el problema real
+- Si viola principios (ej: Singleton viola SRP)
+- Cuando hay solución más simple
+- Si el equipo no entiende el patrón
+
+**Regla**: Usar patrón solo si resuelve problema real y añade valor
+
+### 18. ¿Cómo refactorizarías un sistema legacy grande usando patrones?
+**Respuesta:** 
+1. **Análisis**: Identificar deuda técnica y problemas
+2. **Tests**: Escribir tests para código crítico primero
+3. **Incremental**: Refactorizar módulo por módulo
+4. **Patrones apropiados**:
+   - Adapter para integraciones
+   - Facade para simplificar APIs complejas
+   - Strategy para algoritmos intercambiables
+   - Repository para acceso a datos
+5. **Documentación**: Documentar cambios y razones
+6. **Code Reviews**: Revisar cada refactorización
+7. **Métricas**: Medir mejoras (coverage, complejidad)
+
+### 19. ¿Qué efectos secundarios puede tener aplicar un patrón incorrectamente?
+**Respuesta:** 
+- **Over-engineering**: Complejidad innecesaria
+- **Performance**: Overhead de abstracciones
+- **Mantenibilidad**: Código más difícil de entender
+- **Acoplamiento**: Si se aplica mal, puede aumentar acoplamiento
+- **Testing**: Más difícil de testear si está mal aplicado
+- **Onboarding**: Nuevos desarrolladores confundidos
+
+**Ejemplo**: Singleton mal aplicado puede crear dependencias ocultas y dificultar testing
+
+### 20. ¿Cómo identificarías y resolverías el antipatrón "Architecture By Implication"?
+**Respuesta:** **Architecture By Implication** es arquitectura que existe pero no está documentada.
+
+**Identificación**:
+- Código funciona pero nadie entiende por qué
+- Decisiones arquitectónicas implícitas en código
+- Falta de documentación de diseño
+
+**Solución**:
+- Documentar arquitectura actual (diagramas, ADRs)
+- Hacer explícitas las decisiones
+- Code reviews enfocados en arquitectura
+- Documentar trade-offs y razones
+- Crear guías de arquitectura
+
+---
+
+## Kubernetes & Container Orchestration
+
+### 21. ¿Qué son los componentes principales de Kubernetes?
+**Respuesta:** 
+**Master Node**:
+- **API Server**: Punto de entrada, valida requests
+- **etcd**: Base de datos distribuida (estado del cluster)
+- **Controller Manager**: Controladores que mantienen estado deseado
+- **Scheduler**: Asigna pods a nodes
+
+**Worker Node**:
+- **kubelet**: Agente que ejecuta pods
+- **kube-proxy**: Networking y load balancing
+- **Container Runtime**: Docker, containerd, etc.
+
+### 22. ¿Qué es un Pod y cómo lo usarías?
+**Respuesta:** Pod es unidad mínima de despliegue en Kubernetes. Características:
+- Puede contener uno o más contenedores
+- Contenedores comparten red y almacenamiento
+- Es efímero (se puede recrear)
+- Tiene su propia IP
+- Contenedores en mismo pod comparten localhost
+
+**Uso**: 
+- Contenedores que trabajan juntos (app + sidecar)
+- Compartir volúmenes entre contenedores
+- Comunicación local eficiente
+
+### 23. ¿Cuál es la diferencia entre Deployment, ReplicaSet y Pod?
+**Respuesta:** 
+- **Pod**: Instancia de contenedor(es)
+- **ReplicaSet**: Mantiene número deseado de pods (replicas)
+- **Deployment**: Gestiona ReplicaSets, permite updates y rollbacks
+
+**Jerarquía**: Deployment → ReplicaSet → Pods
+
+**Deployment** añade: Updates, rollbacks, pausa/reanudación
+
+### 24. ¿Cómo configurarías un Service en Kubernetes?
+**Respuesta:** Service expone pods de forma estable. Tipos:
+- **ClusterIP**: IP interna del cluster (default)
+- **NodePort**: Expone puerto en cada nodo
+- **LoadBalancer**: Crea balanceador de carga externo
+- **ExternalName**: Mapea a nombre DNS externo
+
+**Ejemplo**:
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector:
+    app: my-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+```
+
+### 25. ¿Qué es un Ingress y cuándo lo usarías?
+**Respuesta:** Ingress gestiona acceso externo a servicios. Usar para:
+- Routing basado en host/path
+- SSL/TLS termination
+- Load balancing
+- Name-based virtual hosting
+
+**Requiere**: Ingress Controller (nginx, traefik, etc.)
+
+**Ejemplo**: Routing `/api` a backend, `/` a frontend
+
+### 26. ¿Cómo manejarías almacenamiento persistente en Kubernetes?
+**Respuesta:** 
+- **PersistentVolume (PV)**: Recurso de almacenamiento en cluster
+- **PersistentVolumeClaim (PVC)**: Request de almacenamiento por pod
+- **StorageClass**: Define tipos de almacenamiento disponibles
+- **StatefulSet**: Para aplicaciones con estado que necesitan almacenamiento estable
+
+**Flujo**: Pod → PVC → PV → Storage físico
+
+### 27. ¿Qué es RBAC en Kubernetes y cómo lo configurarías?
+**Respuesta:** RBAC (Role-Based Access Control) controla acceso a recursos. Componentes:
+- **Role/ClusterRole**: Define permisos
+- **RoleBinding/ClusterRoleBinding**: Asigna rol a usuario/grupo
+
+**Ejemplo**:
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: pod-reader
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+```
+
+### 28. ¿Cómo implementarías auto-scaling en Kubernetes?
+**Respuesta:** 
+- **Horizontal Pod Autoscaler (HPA)**: Escala pods basado en CPU/memoria
+- **Vertical Pod Autoscaler (VPA)**: Ajusta recursos de pods
+- **Cluster Autoscaler**: Añade/quita nodos
+
+**HPA ejemplo**:
+```yaml
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: my-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+```
+
+### 29. ¿Cómo manejarías secrets en Kubernetes?
+**Respuesta:** 
+- **Secrets**: Objetos que almacenan datos sensibles (encriptados en etcd)
+- Crear secret: `kubectl create secret generic my-secret --from-literal=key=value`
+- Usar en pods mediante:
+  - Variables de entorno
+  - Volúmenes
+- **External Secrets Operator**: Para integrar con Vault, AWS Secrets Manager
+- **Best practices**: Rotación regular, acceso mínimo, encriptación en tránsito
+
+### 30. ¿Qué es un StatefulSet y cuándo usarlo vs Deployment?
+**Respuesta:** StatefulSet gestiona aplicaciones con estado. Diferencias con Deployment:
+- **Identidad estable**: Cada pod tiene nombre único y estable
+- **Ordenado deployment**: Despliega y escala en orden
+- **Almacenamiento estable**: Cada pod tiene su propio volumen
+
+**Usar StatefulSet para**: Bases de datos, aplicaciones que necesitan identidad estable, aplicaciones con estado
+
+**Usar Deployment para**: Aplicaciones stateless, microservices
+
+---
+
+## Software Architecture - Advanced
+
+### 31. ¿Cómo identificarías el antipatrón "Stovepipe Enterprise"?
+**Respuesta:** **Stovepipe Enterprise** son sistemas empresariales aislados que no se comunican. Señales:
+- Sistemas duplicados con funcionalidad similar
+- Datos duplicados entre sistemas
+- Integración manual (copy-paste de datos)
+- No hay arquitectura de integración
+- Cada sistema es silo independiente
+
+**Solución**: 
+- API Gateway para integración
+- Event-driven architecture
+- Message queues para comunicación
+- Arquitectura orientada a servicios
+- Data integration layer
+
+### 32. ¿Qué es "Cover Your Assets" (CYA) y cómo evitarlo?
+**Respuesta:** **CYA** es documentación excesiva sin valor real, solo para "cubrirse". Evitar:
+- Documentar solo lo necesario y útil
+- Documentación viva (actualizada con código)
+- Code como documentación cuando sea posible
+- ADRs (Architecture Decision Records) para decisiones importantes
+- Evitar documentación que nadie lee
+
+**Mejor práctica**: Documentar "por qué" no "qué" (el código ya dice qué)
+
+### 33. ¿Cómo resolverías el antipatrón "Architecture By Implication"?
+**Respuesta:** Hacer arquitectura explícita:
+1. Documentar arquitectura actual (diagramas C4)
+2. ADRs para decisiones importantes
+3. Code reviews enfocados en arquitectura
+4. Guías de arquitectura para desarrolladores
+5. Diagramas actualizados
+6. Onboarding que explique arquitectura
+
+**Herramientas**: PlantUML, Mermaid, Structurizr
+
+### 34. ¿Qué es "The Grand Old Duke of York" y cómo prevenirlo?
+**Respuesta:** **The Grand Old Duke of York** es cambiar arquitectura innecesariamente (subir y bajar sin razón). Prevenir:
+- Evaluar necesidad real de cambio
+- Medir impacto antes de cambiar
+- No cambiar por moda tecnológica
+- ROI claro antes de refactorizar arquitectura
+- Cambios incrementales, no big bang
+
+**Señales**: Refactorizaciones frecuentes sin beneficio claro, cambios de arquitectura sin métricas
+
+---
+
+## Front-end - Advanced Performance
+
+### 35. ¿Cómo implementarías code splitting en una aplicación React?
+**Respuesta:** 
+- **Route-based splitting**: Cargar componentes por ruta
+- **Component-based splitting**: `React.lazy()` y `Suspense`
+- **Library splitting**: Separar vendor bundles
+- **Dynamic imports**: `import()` para carga dinámica
+
+**Ejemplo**:
+```javascript
+const LazyComponent = React.lazy(() => import('./LazyComponent'));
+<Suspense fallback={<div>Loading...</div>}>
+  <LazyComponent />
+</Suspense>
+```
+
+**Beneficios**: Bundle inicial más pequeño, carga más rápida
+
+### 36. ¿Qué estrategias usarías para optimizar rendimiento frontend?
+**Respuesta:** 
+- **Code splitting**: Dividir código en chunks
+- **Lazy loading**: Cargar recursos cuando se necesiten
+- **Tree shaking**: Eliminar código no usado
+- **Minificación y compresión**: Reducir tamaño de archivos
+- **Caching**: Cache de assets (service workers)
+- **CDN**: Servir assets desde CDN
+- **Image optimization**: WebP, lazy loading de imágenes
+- **Critical CSS**: Inline CSS crítico
+- **Preloading**: Preload recursos importantes
+
+### 37. ¿Cómo implementarías virtual scrolling?
+**Respuesta:** Virtual scrolling renderiza solo elementos visibles. Implementación:
+- Calcular altura total basada en número de items
+- Renderizar solo items visibles + buffer
+- Actualizar scroll position virtualmente
+- Re-renderizar items cuando cambia viewport
+
+**Librerías**: react-window, react-virtualized
+
+**Beneficios**: Rendimiento constante con miles de items
+
+### 38. ¿Qué es un Design System y cómo lo implementarías?
+**Respuesta:** Design System es colección de componentes y guías reutilizables. Implementación:
+- **Componentes base**: Botones, inputs, cards
+- **Tokens de diseño**: Colores, tipografía, espaciado
+- **Documentación**: Storybook, Style Guide
+- **Versionado**: Publicar como paquete npm
+- **Testing**: Tests visuales y unitarios
+- **Governance**: Proceso para añadir/modificar componentes
+
+**Beneficios**: Consistencia, velocidad de desarrollo, mantenibilidad
+
+### 39. ¿Cómo manejarías estado global en una aplicación grande?
+**Respuesta:** 
+- **Context API**: Para estado simple compartido
+- **Redux/Zustand**: Para estado complejo
+- **State colocation**: Estado cerca de donde se usa
+- **Normalización**: Estructura de datos normalizada
+- **Selectores**: Memoized selectors para performance
+- **Middleware**: Para side effects (Redux Thunk, Saga)
+
+**Elegir según**: Complejidad, tamaño de app, necesidades de team
+
+---
+
+## Back-end - Advanced Practices
+
+### 40. ¿Cómo diseñarías una API RESTful escalable?
+**Respuesta:** 
+- **Versionado**: `/api/v1/`, `/api/v2/`
+- **Paginación**: Cursor-based o offset-based
+- **Filtrado y sorting**: Query parameters consistentes
+- **Rate limiting**: Por usuario/IP
+- **Caching**: Headers apropiados (ETag, Cache-Control)
+- **HATEOAS**: Hypermedia para navegación
+- **Documentación**: OpenAPI/Swagger
+- **Monitoring**: Logging, métricas, tracing
+
+### 41. ¿Cómo optimizarías un resolver de GraphQL para evitar N+1?
+**Respuesta:** **N+1 problem**: Query principal + N queries adicionales. Soluciones:
+- **DataLoader**: Batching y caching de queries
+- **Join queries**: Cargar datos relacionados en una query
+- **Field-level resolvers**: Resolvers eficientes por campo
+- **Caching**: Cache de resultados de resolvers
+
+**Ejemplo con DataLoader**:
+```javascript
+const userLoader = new DataLoader(ids => 
+  db.users.findByIds(ids)
+);
+// Batching automático de requests
+```
+
+### 42. ¿Qué buenas prácticas aplicarías en GraphQL?
+**Respuesta:** 
+- **Schema design**: Tipos bien definidos, relaciones claras
+- **Resolvers eficientes**: Evitar N+1, usar DataLoader
+- **Query complexity**: Limitar profundidad y complejidad
+- **Caching**: Cache a nivel de campo y query
+- **Error handling**: Errores tipados y descriptivos
+- **Security**: Rate limiting, autenticación, validación
+- **Documentación**: Schema autodocumentado
+- **Versionado**: Evolución sin breaking changes
+
+### 43. ¿Cómo implementarías caching distribuido?
+**Respuesta:** 
+- **Redis Cluster**: Cache distribuido con sharding
+- **Cache-aside pattern**: App verifica cache, carga de BD si no existe
+- **Write-through**: Escribe en cache y BD simultáneamente
+- **Cache invalidation**: TTL, eventos, manual
+- **Consistency**: Estrategia según necesidades (eventual consistency OK para cache)
+- **Monitoring**: Hit rate, latency, memory usage
+
+### 44. ¿Cuándo elegirías Node.js vs Python vs Java vs Go para backend?
+**Respuesta:** 
+- **Node.js**: 
+  - I/O intensivo, real-time apps
+  - Mismo lenguaje frontend/backend
+  - Ecosistema npm grande
+  
+- **Python**: 
+  - Data science, ML, scripting
+  - Desarrollo rápido
+  - Django/Flask para web
+  
+- **Java**: 
+  - Enterprise apps, sistemas grandes
+  - Ecosistema maduro
+  - Spring Boot
+  
+- **Go**: 
+  - Performance crítico
+  - Concurrencia alta
+  - Microservices, APIs
+
+**Elegir según**: Requisitos de performance, ecosistema, expertise del equipo, tipo de aplicación
+
+### 45. ¿Cómo diseñarías un sistema de microservices?
+**Respuesta:** 
+- **Domain boundaries**: Dividir por dominio de negocio
+- **API Gateway**: Punto de entrada único
+- **Service discovery**: Consul, Eureka, Kubernetes
+- **Communication**: REST, gRPC, message queues
+- **Database per service**: Cada servicio su propia BD
+- **Distributed tracing**: Zipkin, Jaeger
+- **Centralized logging**: ELK stack
+- **Circuit breakers**: Resiliencia
+- **Deployment**: Independiente por servicio
+
+---
+
+## Preguntas Mixtas y Arquitectónicas
+
+### 46. ¿Cómo diseñarías un sistema que maneje 1 millón de requests por segundo?
+**Respuesta:** 
+- **Load balancing**: Múltiples niveles (DNS, application, database)
+- **Horizontal scaling**: Muchas instancias stateless
+- **Caching**: Múltiples niveles (CDN, application cache, database cache)
+- **Database**: Sharding, read replicas, NoSQL si apropiado
+- **Async processing**: Queues para tareas pesadas
+- **CDN**: Para assets estáticos
+- **Database optimization**: Índices, query optimization
+- **Monitoring**: Detectar cuellos de botella
+
+### 47. ¿Cómo manejarías transacciones distribuidas en microservices?
+**Respuesta:** 
+- **Saga Pattern**: Secuencia de transacciones locales con compensación
+- **Two-Phase Commit**: No recomendado (acoplamiento fuerte)
+- **Eventual Consistency**: Aceptar consistencia eventual
+- **Outbox Pattern**: Publicar eventos desde transacciones locales
+- **Choreography vs Orchestration**: 
+  - Choreography: Servicios coordinan mediante eventos
+  - Orchestration: Orquestador coordina
+
+**Elegir según**: Requisitos de consistencia, complejidad aceptable
+
+### 48. ¿Cómo implementarías observability en un sistema distribuido?
+**Respuesta:** 
+- **Logging**: Structured logging (JSON), centralized (ELK)
+- **Metrics**: Prometheus, Grafana (latency, throughput, errors)
+- **Tracing**: Distributed tracing (Jaeger, Zipkin)
+  - Trace ID propagado entre servicios
+  - Spans para operaciones
+- **APM**: Application Performance Monitoring
+- **Dashboards**: Visualización de métricas
+- **Alerting**: Alertas proactivas
+
+### 49. ¿Cómo diseñarías un sistema de eventos para microservices?
+**Respuesta:** 
+- **Event Bus**: Kafka, RabbitMQ, AWS EventBridge
+- **Event Sourcing**: Almacenar eventos como fuente de verdad
+- **CQRS**: Separar lectura y escritura
+- **Event Schema**: Versionado de eventos
+- **Idempotency**: Procesar eventos de forma idempotente
+- **Ordering**: Garantizar orden cuando sea necesario
+- **Dead Letter Queue**: Para eventos fallidos
+
+### 50. ¿Cómo manejarías la seguridad en una arquitectura de microservices?
+**Respuesta:** 
+- **API Gateway**: Punto único de autenticación
+- **JWT/OAuth2**: Tokens para autenticación
+- **mTLS**: Mutual TLS entre servicios
+- **Secrets management**: Vault, AWS Secrets Manager
+- **Network policies**: Restringir comunicación
+- **Rate limiting**: Por servicio y global
+- **Input validation**: En cada servicio
+- **Security scanning**: Vulnerabilidades en dependencias
+
+### 51. ¿Cómo optimizarías una base de datos que está lenta?
+**Respuesta:** 
+1. **Análisis**: Execution plans, slow query log
+2. **Índices**: Crear índices apropiados, eliminar no usados
+3. **Query optimization**: Reescribir queries lentas
+4. **Particionamiento**: Para tablas grandes
+5. **Connection pooling**: Reutilizar conexiones
+6. **Read replicas**: Distribuir lecturas
+7. **Caching**: Cache de queries frecuentes
+8. **Hardware**: Más RAM, SSD, mejor CPU
+9. **Archiving**: Mover datos antiguos
+
+### 52. ¿Cómo diseñarías un sistema de notificaciones escalable?
+**Respuesta:** 
+- **Queue-based**: Cola de mensajes (RabbitMQ, SQS)
+- **Workers**: Procesadores de notificaciones escalables
+- **Multi-channel**: Email, SMS, Push, In-app
+- **Templates**: Reutilización de mensajes
+- **Rate limiting**: Por usuario/canal
+- **Retry logic**: Reintentos con exponential backoff
+- **Dead letter queue**: Para fallos persistentes
+- **Analytics**: Tracking de entregas
+
+### 53. ¿Cómo implementarías feature flags en producción?
+**Respuesta:** 
+- **Feature flag service**: LaunchDarkly, custom solution
+- **Types**: 
+  - Release flags (temporary)
+  - Business flags (long-term)
+  - Experiment flags (A/B testing)
+- **Targeting**: Por usuario, porcentaje, geografía
+- **Monitoring**: Métricas de uso de flags
+- **Cleanup**: Remover flags no usados
+- **Testing**: Test con flags activados/desactivados
+
+### 54. ¿Cómo manejarías la migración de datos en un sistema grande?
+**Respuesta:** 
+1. **Planificación**: Análisis de impacto, rollback plan
+2. **Testing**: Probar en staging primero
+3. **Incremental**: Migrar en batches si es posible
+4. **Dual write**: Escribir en ambos sistemas durante transición
+5. **Verification**: Validar datos migrados
+6. **Cutover**: Cambio gradual o big bang según caso
+7. **Monitoring**: Monitorear durante y después
+8. **Rollback**: Plan de rollback preparado
+
+### 55. ¿Cómo diseñarías un sistema de búsqueda escalable?
+**Respuesta:** 
+- **Search engine**: Elasticsearch, Solr
+- **Indexing**: Indexar datos de múltiples fuentes
+- **Sharding**: Distribuir índices
+- **Replication**: Réplicas para disponibilidad
+- **Caching**: Cache de queries frecuentes
+- **Analytics**: Query analytics para optimización
+- **Auto-complete**: Sugerencias en tiempo real
+- **Ranking**: Algoritmos de relevancia
+
+### 56. ¿Cómo implementarías un sistema de colas de mensajes?
+**Respuesta:** 
+- **Message broker**: RabbitMQ, Kafka, AWS SQS
+- **Queue types**: 
+  - Simple queue
+  - Priority queue
+  - Delayed queue
+- **Consumers**: Workers que procesan mensajes
+- **Acknowledgment**: Confirmar procesamiento
+- **Dead letter queue**: Para mensajes fallidos
+- **Scaling**: Múltiples consumers
+- **Monitoring**: Queue depth, processing time
+
+### 57. ¿Cómo manejarías la consistencia de datos en un sistema distribuido?
+**Respuesta:** 
+- **ACID**: Para datos críticos (transacciones distribuidas complejas)
+- **Eventual Consistency**: Para la mayoría de casos (más escalable)
+- **CAP Theorem**: Elegir entre Consistency, Availability, Partition tolerance
+- **Conflict resolution**: 
+  - Last-write-wins
+  - Vector clocks
+  - Application-level
+- **Saga pattern**: Para transacciones distribuidas
+- **CQRS**: Separar lectura y escritura
+
+### 58. ¿Cómo diseñarías un sistema de autenticación distribuido?
+**Respuesta:** 
+- **Centralized auth service**: Servicio dedicado
+- **JWT tokens**: Stateless, escalable
+- **Token refresh**: Refresh tokens para renovación
+- **SSO**: Single Sign-On para múltiples servicios
+- **OAuth2**: Para autorización entre servicios
+- **Session management**: Si es necesario (Redis)
+- **Rate limiting**: Prevenir brute force
+- **Multi-factor auth**: Para seguridad adicional
+
+### 59. ¿Cómo optimizarías el tiempo de carga de una aplicación web?
+**Respuesta:** 
+**Frontend**:
+- Code splitting y lazy loading
+- Minificar y comprimir assets
+- CDN para assets estáticos
+- Image optimization (WebP, lazy loading)
+- Critical CSS inline
+- Preload recursos importantes
+- Service workers para caching
+
+**Backend**:
+- Caching de respuestas
+- Database query optimization
+- Connection pooling
+- CDN para API responses cuando sea posible
+- Compression (gzip, brotli)
+
+### 60. ¿Cómo implementarías un sistema de recomendaciones?
+**Respuesta:** 
+- **Collaborative Filtering**: Basado en comportamiento de usuarios similares
+- **Content-based**: Basado en características del item
+- **Hybrid**: Combinación de ambos
+- **Machine Learning**: Modelos de ML para mejorar
+- **Real-time**: Actualizar recomendaciones en tiempo real
+- **Caching**: Cache de recomendaciones calculadas
+- **A/B testing**: Probar diferentes algoritmos
+
+### 61. ¿Cómo manejarías la escalabilidad de una base de datos?
+**Respuesta:** 
+**Escalado vertical**: Mejorar servidor (limitado)
+**Escalado horizontal**:
+- **Sharding**: Dividir datos por clave
+- **Read replicas**: Distribuir lecturas
+- **Partitioning**: Dividir tablas grandes
+- **Caching**: Redis/Memcached
+- **NoSQL**: Si apropiado (MongoDB, Cassandra)
+
+**Estrategia**: Empezar vertical, luego horizontal cuando sea necesario
+
+### 62. ¿Cómo diseñarías un sistema de analytics en tiempo real?
+**Respuesta:** 
+- **Stream processing**: Kafka, Kinesis para ingesta
+- **Processing**: Spark Streaming, Flink para procesamiento
+- **Storage**: Time-series database (InfluxDB, TimescaleDB)
+- **Aggregation**: Agregaciones en tiempo real
+- **Visualization**: Dashboards en tiempo real (Grafana)
+- **Scaling**: Procesamiento distribuido
+- **Latency**: Objetivo de latencia baja
+
+### 63. ¿Cómo implementarías un sistema de pagos seguro?
+**Respuesta:** 
+- **PCI Compliance**: Cumplir estándares de seguridad
+- **Tokenization**: No almacenar datos de tarjeta
+- **Encryption**: Encriptación en tránsito y reposo
+- **Payment gateway**: Integrar con procesadores (Stripe, PayPal)
+- **Idempotency**: Requests idempotentes
+- **Audit logging**: Log de todas las transacciones
+- **Fraud detection**: Detección de fraude
+- **Testing**: Sandbox para testing
+
+### 64. ¿Cómo manejarías la internacionalización (i18n) en una aplicación?
+**Respuesta:** 
+- **Translation files**: JSON/YAML por idioma
+- **Locale detection**: Detectar idioma del usuario
+- **Date/number formatting**: Formateo según locale
+- **RTL support**: Soporte para idiomas RTL
+- **Pluralization**: Manejo de plurales
+- **Lazy loading**: Cargar traducciones bajo demanda
+- **Fallback**: Idioma por defecto si falta traducción
+- **Tools**: i18next, react-intl
+
+### 65. ¿Cómo diseñarías un sistema de CI/CD para múltiples equipos?
+**Respuesta:** 
+- **Monorepo vs Multi-repo**: Decidir según organización
+- **Pipeline templates**: Reutilizar configuración
+- **Environments**: Dev, Staging, Production
+- **Approval gates**: Aprobaciones para producción
+- **Feature flags**: Control de releases
+- **Rollback**: Rollback automático y manual
+- **Monitoring**: Monitoreo de deployments
+- **Documentation**: Documentar procesos
+
+### 66. ¿Cómo implementarías un sistema de versionado de API?
+**Respuesta:** 
+- **URL versioning**: `/api/v1/`, `/api/v2/`
+- **Header versioning**: `Accept: application/vnd.api+json;version=1`
+- **Backward compatibility**: Mantener versiones anteriores
+- **Deprecation**: Avisar y deprecar gradualmente
+- **Documentation**: Documentar cada versión
+- **Migration guide**: Guía para migrar entre versiones
+- **Sunset policy**: Política de retiro de versiones
+
+### 67. ¿Cómo manejarías la deuda técnica en un proyecto grande?
+**Respuesta:** 
+- **Identificación**: Inventario de deuda técnica
+- **Priorización**: Impacto vs esfuerzo
+- **Planning**: Incluir en roadmap
+- **Incremental**: Refactorizar gradualmente
+- **Tests**: Escribir tests antes de refactorizar
+- **Documentation**: Documentar decisiones
+- **Prevention**: Code reviews, estándares
+- **Metrics**: Medir reducción de deuda
+
+### 68. ¿Cómo diseñarías un sistema de monitoreo y alertas?
+**Respuesta:** 
+- **Metrics**: Prometheus para métricas
+- **Logging**: ELK stack para logs
+- **Tracing**: Jaeger/Zipkin para tracing
+- **Dashboards**: Grafana para visualización
+- **Alerting**: Alertmanager, PagerDuty
+- **SLOs/SLIs**: Service Level Objectives/Indicators
+- **On-call**: Rotación de on-call
+- **Runbooks**: Documentación para incidentes
+
+### 69. ¿Cómo implementarías un sistema de backup y disaster recovery?
+**Respuesta:** 
+- **Backup strategy**: 
+  - Full backups periódicos
+  - Incremental backups frecuentes
+  - Off-site backups
+- **Recovery testing**: Probar restauración regularmente
+- **RTO/RPO**: Recovery Time/Point Objectives
+- **Disaster recovery plan**: Plan documentado
+- **Automation**: Backups automatizados
+- **Monitoring**: Alertas si backup falla
+- **Documentation**: Procedimientos documentados
+
+### 70. ¿Cómo optimizarías un sistema que tiene problemas de memoria?
+**Respuesta:** 
+- **Profiling**: Identificar memory leaks
+- **Garbage collection**: Optimizar GC settings
+- **Object pooling**: Reutilizar objetos
+- **Lazy loading**: Cargar bajo demanda
+- **Caching strategy**: Revisar estrategia de cache
+- **Memory limits**: Establecer límites apropiados
+- **Monitoring**: Monitorear uso de memoria
+- **Code review**: Revisar código por leaks
+
+### 71. ¿Cómo diseñarías un sistema de colas de trabajo asíncrono?
+**Respuesta:** 
+- **Job queue**: Redis, RabbitMQ, AWS SQS
+- **Workers**: Procesadores de trabajos escalables
+- **Priority**: Colas de prioridad
+- **Retry**: Reintentos con exponential backoff
+- **Dead letter queue**: Para trabajos fallidos
+- **Monitoring**: Estado de trabajos, tiempo de procesamiento
+- **Scaling**: Auto-scaling de workers
+- **Idempotency**: Trabajos idempotentes
+
+### 72. ¿Cómo manejarías la migración de un monolith a microservices?
+**Respuesta:** 
+- **Strangler Fig Pattern**: Reemplazar gradualmente
+- **Identify boundaries**: Identificar límites de dominio
+- **Extract services**: Extraer servicios uno por uno
+- **API Gateway**: Punto de entrada único
+- **Database**: Migrar datos gradualmente
+- **Testing**: Tests de integración entre servicios
+- **Monitoring**: Monitoreo durante migración
+- **Team structure**: Equipos por servicio
+
+### 73. ¿Cómo implementarías un sistema de rate limiting distribuido?
+**Respuesta:** 
+- **Token bucket**: Algoritmo de rate limiting
+- **Distributed cache**: Redis para estado compartido
+- **Sliding window**: Ventana deslizante
+- **Per user/IP**: Límites por usuario o IP
+- **Tiers**: Diferentes límites según plan
+- **Headers**: Informar límites al cliente
+- **Monitoring**: Métricas de rate limiting
+
+### 74. ¿Cómo diseñarías un sistema de búsqueda de texto completo?
+**Respuesta:** 
+- **Search engine**: Elasticsearch, Solr
+- **Indexing**: Indexar contenido de múltiples fuentes
+- **Analyzers**: Para diferentes idiomas
+- **Ranking**: Algoritmos de relevancia
+- **Faceted search**: Filtros por categorías
+- **Autocomplete**: Sugerencias en tiempo real
+- **Fuzzy search**: Búsqueda con errores de tipeo
+- **Highlighting**: Resaltar términos encontrados
+
+### 75. ¿Cómo manejarías la sincronización de datos entre sistemas?
+**Respuesta:** 
+- **ETL**: Extract, Transform, Load
+- **Change Data Capture**: Detectar cambios
+- **Event-driven**: Eventos para sincronización
+- **Batch processing**: Procesamiento por lotes
+- **Conflict resolution**: Resolver conflictos
+- **Idempotency**: Operaciones idempotentes
+- **Monitoring**: Monitorear lag de sincronización
+- **Error handling**: Manejo robusto de errores
+
+### 76. ¿Cómo implementarías un sistema de logs centralizado?
+**Respuesta:** 
+- **Log aggregation**: Fluentd, Logstash
+- **Storage**: Elasticsearch, S3
+- **Visualization**: Kibana, Grafana
+- **Structured logging**: JSON format
+- **Log levels**: DEBUG, INFO, WARN, ERROR
+- **Retention**: Política de retención
+- **Search**: Búsqueda eficiente
+- **Alerting**: Alertas basadas en logs
+
+### 77. ¿Cómo diseñarías un sistema de autenticación multi-factor?
+**Respuesta:** 
+- **Factors**: 
+  - Something you know (password)
+  - Something you have (phone, token)
+  - Something you are (biometric)
+- **TOTP**: Time-based One-Time Password
+- **SMS/Email**: Códigos por SMS/email
+- **Backup codes**: Códigos de respaldo
+- **Recovery**: Proceso de recuperación
+- **UX**: Balance seguridad/usabilidad
+
+### 78. ¿Cómo optimizarías un sistema de imágenes?
+**Respuesta:** 
+- **CDN**: Servir desde CDN
+- **Format optimization**: WebP, AVIF
+- **Responsive images**: Diferentes tamaños
+- **Lazy loading**: Cargar cuando se necesita
+- **Compression**: Compresión apropiada
+- **Caching**: Cache agresivo
+- **Processing**: Resize/optimize on upload
+- **Storage**: Almacenamiento eficiente
+
+### 79. ¿Cómo implementarías un sistema de A/B testing?
+**Respuesta:** 
+- **Feature flags**: Para variantes
+- **Traffic splitting**: Dividir tráfico
+- **Metrics**: Métricas a medir
+- **Statistical significance**: Validación estadística
+- **User segmentation**: Segmentar usuarios
+- **Analysis**: Análisis de resultados
+- **Rollout**: Despliegue gradual
+- **Tools**: Optimizely, LaunchDarkly
+
+### 80. ¿Cómo manejarías la escalabilidad de un sistema de mensajería?
+**Respuesta:** 
+- **Message broker**: Kafka, RabbitMQ cluster
+- **Partitioning**: Partir mensajes
+- **Consumers**: Múltiples consumers
+- **Load balancing**: Balancear carga
+- **Persistence**: Persistir mensajes
+- **Replication**: Réplicas para disponibilidad
+- **Monitoring**: Queue depth, throughput
+- **Auto-scaling**: Escalar según carga
+
+### 81. ¿Cómo diseñarías un sistema de cache multi-nivel?
+**Respuesta:** 
+- **L1**: Cache en memoria de aplicación
+- **L2**: Cache distribuido (Redis)
+- **L3**: CDN para assets estáticos
+- **Cache strategy**: 
+  - Cache-aside
+  - Write-through
+  - Write-behind
+- **Invalidation**: Estrategia de invalidación
+- **TTL**: Time To Live apropiado
+- **Monitoring**: Hit rate, latency
+
+### 82. ¿Cómo implementarías un sistema de auditoría?
+**Respuesta:** 
+- **Event logging**: Log de todos los eventos importantes
+- **Immutable logs**: Logs inmutables
+- **User tracking**: Quién hizo qué
+- **Timestamp**: Cuándo ocurrió
+- **Context**: Contexto del evento
+- **Storage**: Almacenamiento seguro y durable
+- **Retention**: Política de retención
+- **Querying**: Búsqueda eficiente
+- **Compliance**: Cumplir regulaciones
+
+### 83. ¿Cómo manejarías la migración de datos entre formatos?
+**Respuesta:** 
+- **ETL pipeline**: Extract, Transform, Load
+- **Validation**: Validar datos migrados
+- **Incremental**: Migrar en batches
+- **Rollback**: Plan de rollback
+- **Testing**: Probar en staging
+- **Monitoring**: Monitorear durante migración
+- **Verification**: Verificar integridad
+- **Documentation**: Documentar proceso
+
+### 84. ¿Cómo optimizarías un sistema de reportes?
+**Respuesta:** 
+- **Pre-computation**: Pre-calcular reportes
+- **Caching**: Cache de reportes generados
+- **Incremental updates**: Actualizar incrementalmente
+- **Materialized views**: Vistas materializadas
+- **Async generation**: Generar asíncronamente
+- **Data warehouse**: Usar data warehouse
+- **Scheduling**: Programar generación
+- **Compression**: Comprimir reportes grandes
+
+### 85. ¿Cómo diseñarías un sistema de configuración distribuido?
+**Respuesta:** 
+- **Configuration service**: Servicio centralizado
+- **Versioning**: Versionado de configuración
+- **Environment-specific**: Config por ambiente
+- **Hot reload**: Recargar sin restart
+- **Validation**: Validar configuración
+- **Secrets management**: Manejar secrets separadamente
+- **Fallback**: Valores por defecto
+- **Monitoring**: Cambios de configuración
+
+### 86. ¿Cómo implementarías un sistema de health checks?
+**Respuesta:** 
+- **Health endpoints**: `/health`, `/ready`, `/live`
+- **Dependencies**: Verificar dependencias
+- **Database**: Verificar conexión a BD
+- **External services**: Verificar servicios externos
+- **Resource checks**: CPU, memoria, disco
+- **Kubernetes**: Liveness y readiness probes
+- **Monitoring**: Alertas si health check falla
+- **Load balancer**: Remover si unhealthy
+
+### 87. ¿Cómo manejarías la consistencia eventual en un sistema distribuido?
+**Respuesta:** 
+- **Accept eventual consistency**: Aceptar como trade-off
+- **Conflict resolution**: 
+  - Last-write-wins
+  - Application-level
+  - Vector clocks
+- **Compensating actions**: Acciones compensatorias
+- **Idempotency**: Operaciones idempotentes
+- **Versioning**: Versiones para detectar conflictos
+- **User experience**: Manejar UX durante inconsistencia
+- **Monitoring**: Detectar y alertar inconsistencias
+
+### 88. ¿Cómo diseñarías un sistema de file storage escalable?
+**Respuesta:** 
+- **Object storage**: S3, Azure Blob, GCS
+- **CDN**: Para distribución
+- **Replication**: Réplicas geográficas
+- **Versioning**: Versionado de archivos
+- **Access control**: Control de acceso
+- **Lifecycle policies**: Políticas de ciclo de vida
+- **Backup**: Backup de archivos críticos
+- **Monitoring**: Uso de almacenamiento
+
+### 89. ¿Cómo implementarías un sistema de búsqueda geográfica?
+**Respuesta:** 
+- **Geospatial database**: PostGIS, MongoDB geospatial
+- **Indexing**: Índices geoespaciales
+- **Queries**: 
+  - Near me
+  - Within radius
+  - Bounding box
+- **Distance calculation**: Haversine, etc.
+- **Caching**: Cache de resultados
+- **Scaling**: Sharding geográfico
+- **Tools**: Elasticsearch geo queries
+
+### 90. ¿Cómo manejarías la migración de una base de datos sin downtime?
+**Respuesta:** 
+- **Dual write**: Escribir en ambos sistemas
+- **Read from both**: Leer de ambos durante transición
+- **Data sync**: Sincronizar datos
+- **Gradual cutover**: Cambio gradual de tráfico
+- **Monitoring**: Monitorear ambos sistemas
+- **Rollback plan**: Plan de rollback
+- **Testing**: Probar extensivamente
+- **Verification**: Verificar integridad de datos
+
+### 91. ¿Cómo diseñarías un sistema de machine learning en producción?
+**Respuesta:** 
+- **Model serving**: Servir modelos (TensorFlow Serving, MLflow)
+- **Feature store**: Almacén de features
+- **A/B testing**: Probar modelos
+- **Monitoring**: 
+  - Model drift
+  - Prediction latency
+  - Accuracy
+- **Retraining**: Re-entrenar modelos
+- **Versioning**: Versionado de modelos
+- **Pipeline**: CI/CD para ML
+- **Infrastructure**: GPU/TPU cuando necesario
+
+### 92. ¿Cómo implementarías un sistema de real-time collaboration?
+**Respuesta:** 
+- **WebSockets**: Comunicación bidireccional
+- **Operational Transform**: Para conflict resolution
+- **CRDTs**: Conflict-free Replicated Data Types
+- **Presence**: Mostrar usuarios online
+- **Conflict resolution**: Resolver conflictos
+- **Scaling**: Múltiples servidores
+- **Persistence**: Guardar cambios
+- **Tools**: ShareJS, Yjs, Firebase Realtime Database
+
+### 93. ¿Cómo manejarías la seguridad de una API pública?
+**Respuesta:** 
+- **Authentication**: API keys, OAuth2
+- **Rate limiting**: Por API key/IP
+- **HTTPS**: Obligatorio
+- **Input validation**: Validar toda entrada
+- **Output sanitization**: Sanitizar salida
+- **CORS**: Configurar apropiadamente
+- **WAF**: Web Application Firewall
+- **Monitoring**: Detectar ataques
+- **Documentation**: Documentar seguridad
+
+### 94. ¿Cómo diseñarías un sistema de content delivery?
+**Respuesta:** 
+- **CDN**: Content Delivery Network
+- **Edge caching**: Cache en edge
+- **Origin server**: Servidor origen
+- **Cache invalidation**: Invalidar cache
+- **Compression**: Comprimir contenido
+- **HTTP/2**: Para mejor performance
+- **Geographic distribution**: Distribución geográfica
+- **Monitoring**: Performance de CDN
+
+### 95. ¿Cómo implementarías un sistema de workflow automation?
+**Respuesta:** 
+- **Workflow engine**: Orquestador de workflows
+- **State machine**: Máquina de estados
+- **Tasks**: Tareas del workflow
+- **Retry**: Reintentos automáticos
+- **Error handling**: Manejo de errores
+- **Monitoring**: Estado de workflows
+- **Scaling**: Escalar workers
+- **Tools**: Temporal, AWS Step Functions, Airflow
+
+### 96. ¿Cómo manejarías la migración de un sistema legacy a cloud?
+**Respuesta:** 
+- **Assessment**: Evaluar sistema actual
+- **Strategy**: 
+  - Lift and shift
+  - Refactor
+  - Rebuild
+- **Incremental**: Migrar gradualmente
+- **Hybrid**: Híbrido durante transición
+- **Testing**: Probar en cloud
+- **Training**: Entrenar equipo
+- **Cost optimization**: Optimizar costos
+- **Security**: Revisar seguridad
+
+### 97. ¿Cómo diseñarías un sistema de data pipeline?
+**Respuesta:** 
+- **Ingestion**: Kafka, Kinesis para ingesta
+- **Processing**: Spark, Flink para procesamiento
+- **Storage**: Data lake, data warehouse
+- **Orchestration**: Airflow, Prefect
+- **Monitoring**: Monitoreo de pipeline
+- **Error handling**: Manejo de errores
+- **Scaling**: Escalar según carga
+- **Data quality**: Validación de calidad
+
+### 98. ¿Cómo implementarías un sistema de service mesh?
+**Respuesta:** 
+- **Service mesh**: Istio, Linkerd
+- **Sidecar proxy**: Proxy junto a cada servicio
+- **Traffic management**: Gestión de tráfico
+- **Security**: mTLS entre servicios
+- **Observability**: Métricas, logs, tracing
+- **Policy enforcement**: Políticas de seguridad
+- **Circuit breaking**: Circuit breakers
+- **Load balancing**: Balanceo de carga
+
+### 99. ¿Cómo manejarías la optimización de costos en cloud?
+**Respuesta:** 
+- **Right-sizing**: Tamaño apropiado de recursos
+- **Reserved instances**: Instancias reservadas
+- **Spot instances**: Instancias spot cuando apropiado
+- **Auto-scaling**: Escalar según necesidad
+- **Monitoring**: Monitorear costos
+- **Tagging**: Etiquetar recursos
+- **Cost allocation**: Asignación de costos
+- **Optimization tools**: AWS Cost Explorer, etc.
+
+### 100. ¿Cómo diseñarías un sistema de zero-downtime deployment?
+**Respuesta:** 
+- **Blue-Green deployment**: Dos ambientes idénticos
+- **Canary deployment**: Despliegue gradual
+- **Health checks**: Verificar salud antes de cambiar tráfico
+- **Load balancer**: Cambiar tráfico gradualmente
+- **Database migrations**: Migraciones compatibles hacia atrás
+- **Feature flags**: Control de features
+- **Rollback**: Rollback rápido si hay problemas
+- **Monitoring**: Monitoreo durante deploy
+- **Testing**: Probar extensivamente antes
+
+---
+
+**Nota**: Estas 100 preguntas cubren todos los temas específicos de Senior Software Engineer, enfocándose en experiencia práctica, arquitectura avanzada y optimización de sistemas complejos. Estudia cada respuesta en detalle y practica con casos reales. ¡Éxito en tu examen!
