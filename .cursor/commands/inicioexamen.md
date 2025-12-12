@@ -1,1 +1,1 @@
-Necesito que analices todos los documentos, especialmente los de assuresoft. Esto es para el examen de "Software Engineer II". Si por alguna razón no tenemos los documentos relacionados con las preguntas o consultas, puedes buscar la respuesta correcta en internet.
+Necesito que analices todos los documentos, especialmente los de assuresoft. Esto es para el examen de "senior Software Engineer". Si por alguna razón no tenemos los documentos relacionados con las preguntas o consultas, puedes buscar la respuesta correcta en internet.
