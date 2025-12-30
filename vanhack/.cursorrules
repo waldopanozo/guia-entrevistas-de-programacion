@@ -22,10 +22,32 @@
 
 ## CRITICAL: MANDATORY TEST GENERATION FOR EACH STEP
 
-**Qualified platform provides 3 windows:**
+**Qualified platform supports TWO challenge formats:**
+
+### Format 1: Simple Code Challenge
+**3 windows:**
 1. **Code editor** - Where you write your solution (editable)
 2. **Tests editor** - Where you can add/edit tests manually (editable)
 3. **Results** - Shows test execution results
+
+### Format 2: Project Code Challenge (Advanced)
+**Multiple sections:**
+1. **Sidebar (left)** - File navigation, some files may be locked
+2. **Top Toolbar** - Controls:
+   - **RUN TESTS** button - Test your code (you see results)
+   - **SUBMIT SOLUTION** button - Submit final solution (you DON'T see results, only one chance)
+   - **Web Preview** button - For front-end challenges (if applicable)
+3. **Code Entry (center)** - Multiple files, drag-and-drop layout
+4. **Instructions (right)** - Challenge instructions
+5. **Results Output (bottom)** - Test results after clicking RUN TESTS
+
+**IMPORTANT for Project Code Challenges:**
+- You can edit test files and add your own tests
+- Your test edits are visible to reviewers but NOT used in final submission
+- RUN TESTS shows you results, SUBMIT SOLUTION does NOT show results
+- You can only SUBMIT once - be ready before clicking
+- Some files may be locked (cannot edit)
+- Files can be reset using contextual menu
 
 **FOR EACH STEP (STEP 1, STEP 2, STEP 3), you MUST also generate corresponding tests:**
 
@@ -38,11 +60,33 @@
 - You need to manually add tests to the test editor
 - Missing edge cases will cause the solution to fail
 - Each step should have tests that validate that specific step's functionality
+- In Project Code Challenges, you can edit test files to add your own tests
 
 **Example: If the function should return "Hello, [name]!" OR "Hello there!" based on input:**
 - STEP 1 test: Basic case with valid name
 - STEP 2 test: Edge case with empty name (should return "Hello there!")
 - STEP 3 test: All edge cases (null, empty string, whitespace, etc.)
+
+## Qualified Platform Workflow
+
+### Recommended Workflow for Project Code Challenges:
+
+1. **Read instructions completely** - Understand the challenge requirements
+2. **Review starting code** - Explore file structure, understand existing code
+3. **Review example tests** - See what's being tested
+4. **Work on solution** - Implement your code following STEP 1, STEP 2, STEP 3
+5. **Click RUN TESTS** - Test your code frequently (you see results)
+6. **Add your own tests** - Edit test files to add edge cases
+7. **Iterate** - Fix issues, add edge cases, improve solution
+8. **SUBMIT SOLUTION** - Only when ready (you won't see results, only one chance)
+
+### Important Notes:
+
+- **RUN TESTS** = You see results, can test multiple times
+- **SUBMIT SOLUTION** = Final submission, you DON'T see results, only one chance
+- You can edit test files to add your own tests (visible to reviewers)
+- Some files may be locked (cannot edit)
+- Web Preview available for front-end challenges
 
 ## User Context
 - **Level:** Senior Software Engineer
