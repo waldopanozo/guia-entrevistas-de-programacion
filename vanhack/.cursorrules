@@ -1,0 +1,857 @@
+# Rules for Woven Evaluation - Backend PHP
+
+## CRITICAL: MANDATORY CODE EVOLUTION DISPLAY
+
+**EVERY TIME code is generated, you MUST show the evolution step by step:**
+
+1. **STEP 1: Initial simple version** - Basic solution, not perfect
+2. **STEP 2: Improvements** - Add edge cases, validations, optimizations
+3. **STEP 3: Final version** - With comments explaining the evolution
+
+**This is MANDATORY for ALL code generation requests. Never show only the final version.**
+
+## CRITICAL: DISPLAY FORMAT - NO FILES
+
+**IMPORTANT: When showing solutions:**
+- **DO NOT create or write files** - Only display code in the chat/response
+- **Show code in markdown code blocks** - Display each step separately
+- **Show code by parts** - Each STEP should be shown as a separate code block
+- **User will copy code manually** - They will copy from the displayed code blocks to Qualified
+- **Display format:** Show STEP 1, then STEP 2, then STEP 3, each in separate code blocks
+- **Tests format:** Show tests for each step in separate code blocks after the corresponding code step
+
+## CRITICAL: MANDATORY TEST GENERATION FOR EACH STEP
+
+**Qualified platform provides 3 windows:**
+1. **Code editor** - Where you write your solution (editable)
+2. **Tests editor** - Where you can add/edit tests manually (editable)
+3. **Results** - Shows test execution results
+
+**FOR EACH STEP (STEP 1, STEP 2, STEP 3), you MUST also generate corresponding tests:**
+
+- **STEP 1 tests:** Basic test cases for the initial simple version
+- **STEP 2 tests:** Additional tests for edge cases and improvements
+- **STEP 3 tests:** Complete test suite covering all scenarios including edge cases
+
+**This is CRITICAL because:**
+- The provided tests may not cover all edge cases
+- You need to manually add tests to the test editor
+- Missing edge cases will cause the solution to fail
+- Each step should have tests that validate that specific step's functionality
+
+**Example: If the function should return "Hello, [name]!" OR "Hello there!" based on input:**
+- STEP 1 test: Basic case with valid name
+- STEP 2 test: Edge case with empty name (should return "Hello there!")
+- STEP 3 test: All edge cases (null, empty string, whitespace, etc.)
+
+## User Context
+- **Level:** Senior Software Engineer
+- **Primary Language:** PHP (Backend)
+- **Experience:** Experienced Backend Engineer
+- **Purpose:** Code for Woven technical evaluation (DO NOT use AI during actual evaluation, but these rules are for preparation)
+- **Language:** ALL code, comments, and documentation MUST be in ENGLISH
+
+## General Principles
+
+### 1. Iterative and Natural Development
+- **ALWAYS** show code evolution step by step
+- Start with simple solution, then improve
+- Include comments showing thought process
+- Show decisions and tradeoffs considered
+- **Display evolution in separate steps, not just final code**
+
+### 2. Senior Code Style
+- Clean and well-structured code
+- Descriptive and meaningful names
+- Small, focused functions
+- Appropriate edge case handling
+- Performance consideration when relevant
+- But NOT perfect from first attempt - show evolution
+
+### 3. Human and Natural Comments
+- Comments that explain "why", not just "what"
+- Mention considered alternatives
+- Explain tradeoffs
+- Show thought process
+- Include notes about edge cases discovered during development
+- **All comments in ENGLISH**
+
+## Code Structure - MANDATORY FORMAT
+
+### For New Functions - ALWAYS Show Evolution
+
+**STEP 1: Initial Basic Version**
+```php
+// STEP 1: Initial version - basic case
+function functionName($input) {
+    // Basic validation first
+    if (empty($input)) {
+        return null; // Edge case considered
+    }
+    
+    // Main logic - simple version
+    // ...
+    
+    return $result;
+}
+```
+
+**STEP 2: Improvements and Edge Cases**
+```php
+// STEP 2: Added validations after testing
+// Discovered I needed to validate null user
+function functionName($input) {
+    // Edge cases first - learned from previous bugs
+    if (empty($input) || !$input) {
+        return null; // Edge case I didn't consider initially
+    }
+    
+    // Improved logic
+    // ...
+    
+    return $result;
+}
+```
+
+**STEP 3: Final Version with Optimizations**
+```php
+// STEP 3: Considered optimization but not necessary for this case
+// For production I'd add cache, but for this simple case it's not needed
+function functionName($input) {
+    if (empty($input) || !$input) {
+        return null;
+    }
+    
+    // Considered caching here but not necessary for this scenario
+    // Main logic with optimizations
+    // ...
+    
+    return $result;
+}
+```
+
+### Comments Showing Process
+
+```php
+// Tried first with [approach X], but found that [problem]
+// Changed to [approach Y] because [advantage]
+// Considered [alternative Z] but discarded because [reason]
+
+// Edge case discovered: [description]
+// Solution: [implemented solution]
+```
+
+## Specific Patterns for Woven Evaluation
+
+### 1. Authorization and Permissions
+
+**STEP 1: Basic Version**
+```php
+/**
+ * Checks if a user is authorized to access a page
+ * 
+ * STEP 1: Basic implementation with simple permission check
+ * 
+ * @param User $user The user to verify
+ * @param string $pageId The page ID
+ * @return bool True if has access
+ */
+function isUserAuthorizedForPage(User $user, string $pageId): bool {
+    // Basic check
+    return in_array($pageId, $user->allowedPages);
+}
+```
+
+**STEP 2: Added Edge Cases**
+```php
+/**
+ * STEP 2: Added edge case validations
+ * Learned from previous bugs that null checks are critical
+ */
+function isUserAuthorizedForPage(User $user, string $pageId): bool {
+    // Edge cases first - learned this from previous experience
+    if (empty($pageId)) {
+        return false; // Invalid page
+    }
+    
+    if (!$user || !$user->isActive()) {
+        return false; // Invalid or inactive user
+    }
+    
+    // Main logic
+    return in_array($pageId, $user->allowedPages);
+}
+```
+
+**STEP 3: Final with Role Fallback**
+```php
+/**
+ * STEP 3: Added role-based fallback
+ * Considered checking roles first, but specific permissions have priority
+ * This allows flexibility for cases where admin has general access
+ * but regular user has specific permissions
+ */
+function isUserAuthorizedForPage(User $user, string $pageId): bool {
+    // Edge cases first
+    if (empty($pageId)) {
+        return false;
+    }
+    
+    if (!$user || !$user->isActive()) {
+        return false;
+    }
+    
+    // Main logic - specific permissions first
+    // Considered checking roles first, but specific permissions have priority
+    if ($user->hasPagePermission($pageId)) {
+        return true;
+    }
+    
+    // Fallback to role verification
+    return $user->hasRole('admin') || $user->hasRole('editor');
+}
+```
+
+### 2. Debugging and Problem Resolution
+
+**STEP 1: Basic Structure**
+```php
+/**
+ * Analyzes a bug report and provides investigation steps
+ * 
+ * STEP 1: Basic structure to extract information
+ */
+function analyzeBugReport(array $bugReport): array {
+    $analysis = [
+        'available_info' => [],
+        'missing_info' => []
+    ];
+    
+    // Extract available information
+    if (isset($bugReport['error_message'])) {
+        $analysis['available_info']['error'] = $bugReport['error_message'];
+    }
+    
+    return $analysis;
+}
+```
+
+**STEP 2: Added Missing Info Detection**
+```php
+/**
+ * STEP 2: Added missing information detection
+ * This is critical for effective debugging
+ */
+function analyzeBugReport(array $bugReport): array {
+    $analysis = [
+        'available_info' => [],
+        'missing_info' => [],
+        'investigation_steps' => []
+    ];
+    
+    // Extract available information
+    if (isset($bugReport['error_message'])) {
+        $analysis['available_info']['error'] = $bugReport['error_message'];
+    }
+    
+    // Identify what's missing - critical for effective debugging
+    if (!isset($bugReport['steps_to_reproduce'])) {
+        $analysis['missing_info'][] = 'Steps to reproduce';
+    }
+    
+    return $analysis;
+}
+```
+
+**STEP 3: Final with Investigation Steps**
+```php
+/**
+ * STEP 3: Added investigation steps based on experience
+ * Would start with logs, then code, then environment
+ */
+function analyzeBugReport(array $bugReport): array {
+    $analysis = [
+        'available_info' => [],
+        'missing_info' => [],
+        'investigation_steps' => [],
+        'hypotheses' => []
+    ];
+    
+    // First, extract available information
+    // Note: In production I'd use a more robust parser
+    if (isset($bugReport['error_message'])) {
+        $analysis['available_info']['error'] = $bugReport['error_message'];
+    }
+    
+    // Identify what's missing - critical for effective debugging
+    if (!isset($bugReport['steps_to_reproduce'])) {
+        $analysis['missing_info'][] = 'Steps to reproduce';
+    }
+    
+    // Investigation steps based on experience
+    // Would start with logs, then code, then environment
+    $analysis['investigation_steps'] = [
+        '1. Review application logs for error timestamp',
+        '2. Verify if reproducible in other environments',
+        '3. Review recent changes in related code'
+    ];
+    
+    return $analysis;
+}
+```
+
+### 3. Deployment and DevOps
+
+**STEP 1: Basic Plan Structure**
+```php
+/**
+ * Generates deployment plan for SPA
+ * 
+ * STEP 1: Basic structure with assumptions
+ */
+function generateDeploymentPlan(string $provider = 'aws'): array {
+    $plan = [
+        'assumptions' => [],
+        'steps' => []
+    ];
+    
+    // Clear assumptions - important for evaluation
+    $plan['assumptions'] = [
+        'SPA built with modern framework (React/Vue/Angular)',
+        'Build process generates static files',
+        'Own domain available'
+    ];
+    
+    return $plan;
+}
+```
+
+**STEP 2: Added Detailed Steps**
+```php
+/**
+ * STEP 2: Added detailed steps
+ * Balance between being specific and being clear
+ */
+function generateDeploymentPlan(string $provider = 'aws'): array {
+    $plan = [
+        'assumptions' => [],
+        'steps' => [],
+        'considerations' => []
+    ];
+    
+    $plan['assumptions'] = [
+        'SPA built with modern framework (React/Vue/Angular)',
+        'Build process generates static files',
+        'Own domain available',
+        'Moderate traffic initially'
+    ];
+    
+    // Detailed steps but not excessively technical
+    // Balance between being specific and being clear
+    $plan['steps'] = [
+        [
+            'step' => 'Build and preparation',
+            'details' => [
+                'Run npm run build (or equivalent)',
+                'Verify all assets are included',
+                'Optimize images if necessary'
+            ],
+            'tools' => ['npm', 'webpack/vite']
+        ]
+    ];
+    
+    return $plan;
+}
+```
+
+**STEP 3: Final Complete Plan**
+```php
+/**
+ * STEP 3: Complete plan with multiple areas
+ * Approach: Cover multiple areas (breadth) with adequate detail (depth)
+ * Based on AWS experience, but adaptable to other providers
+ */
+function generateDeploymentPlan(string $provider = 'aws'): array {
+    $plan = [
+        'assumptions' => [],
+        'steps' => [],
+        'considerations' => []
+    ];
+    
+    // Clear assumptions - important for evaluation
+    $plan['assumptions'] = [
+        'SPA built with modern framework (React/Vue/Angular)',
+        'Build process generates static files',
+        'Own domain available',
+        'Moderate traffic initially'
+    ];
+    
+    // Detailed steps covering multiple areas
+    $plan['steps'] = [
+        [
+            'step' => 'Build and preparation',
+            'details' => [
+                'Run npm run build (or equivalent)',
+                'Verify all assets are included',
+                'Optimize images if necessary'
+            ],
+            'tools' => ['npm', 'webpack/vite']
+        ],
+        [
+            'step' => 'Static hosting',
+            'details' => [
+                'Create S3 bucket for static hosting',
+                'Enable "Static website hosting"',
+                'Configure index.html and error.html for SPA routing'
+            ],
+            'tools' => ['AWS S3']
+        ],
+        [
+            'step' => 'CDN and distribution',
+            'details' => [
+                'Create CloudFront distribution pointing to S3',
+                'Configure caching policies',
+                'Enable compression'
+            ],
+            'tools' => ['AWS CloudFront']
+        ]
+    ];
+    
+    // Additional considerations
+    $plan['considerations'] = [
+        'Security: Enable HTTPS, configure CORS',
+        'Performance: Cache static assets, optimize delivery',
+        'Cost: Monitor S3 storage and CloudFront data transfer'
+    ];
+    
+    return $plan;
+}
+```
+
+## Specific Rules for Cursor
+
+### When Generating Code - MANDATORY:
+
+1. **ALWAYS show evolution in steps:**
+   - **STEP 1:** Simple/commented version first
+   - **STEP 2:** Improved version with edge cases
+   - **STEP 3:** Final version with optimizations
+   - Include comments explaining changes between steps
+
+2. **ALWAYS display code in chat, NEVER create files:**
+   - **DO NOT create or write files** - Only show code in markdown code blocks
+   - **Show each STEP separately** - Each step in its own code block
+   - **User will copy manually** - They copy from displayed code to Qualified
+   - **Format:** Show STEP 1 code block, then STEP 1 tests, then STEP 2 code, etc.
+
+3. **ALWAYS generate tests for EACH step:**
+   - **STEP 1 Tests:** Basic test cases for initial version
+   - **STEP 2 Tests:** Additional tests for edge cases discovered
+   - **STEP 3 Tests:** Complete test suite covering ALL scenarios
+   - Tests should be in PHPUnit format (extends TestCase)
+   - Tests should be ready to copy into the Qualified test editor
+   - **Display tests in separate code blocks** after each corresponding code step
+
+4. **Test Coverage Requirements:**
+   - Cover happy path (normal cases)
+   - Cover edge cases (empty, null, whitespace, invalid input)
+   - Cover boundary conditions
+   - Cover error cases
+   - Each step should add tests for the new functionality/edge cases
+
+4. **Include process comments:**
+   - "Tried first with X, but..."
+   - "Improved this because..."
+   - "Considered Y but discarded because..."
+
+5. **Show discovered edge cases:**
+   - Not all from the start
+   - Some discovered during development
+   - Mention in comments when discovered
+   - **Add tests for each discovered edge case**
+
+6. **Include natural small imperfections:**
+   - Variable names that evolve
+   - Minor refactorings
+   - Comments showing resolved doubts
+
+7. **Appropriate Senior level:**
+   - Good practices (SOLID, clean code)
+   - Performance consideration
+   - Appropriate error handling
+   - But NOT perfect from first attempt
+
+8. **ALL in ENGLISH:**
+   - Code comments
+   - Function names (use English)
+   - Variable names (use English)
+   - Documentation
+   - Test names and descriptions
+   - Everything must be in English
+
+### Comment Style:
+
+```php
+// ✅ GOOD - Shows thought process
+// Tried first with a simple loop, but it was O(n²) for large datasets
+// Optimized using a hash map - tradeoff: more memory but O(n)
+function optimizedFunction($data) {
+    // ...
+}
+
+// ❌ BAD - Too generic or perfect
+// This function processes data efficiently
+function processData($data) {
+    // perfect code without context
+}
+```
+
+### Code Evolution Examples with Tests:
+
+**STEP 1: Basic solution**
+```php
+// STEP 1: Basic solution
+function checkAccess($user, $page) {
+    return in_array($page, $user->allowedPages);
+}
+```
+
+**STEP 1 Tests:**
+```php
+class CheckAccessTest extends TestCase {
+    public function testUserCanAccessAuthorizedPage() {
+        $user = new User(['allowedPages' => ['page1', 'page2']]);
+        $this->assertTrue(checkAccess($user, 'page1'));
+    }
+    
+    public function testUserCannotAccessUnauthorizedPage() {
+        $user = new User(['allowedPages' => ['page1']]);
+        $this->assertFalse(checkAccess($user, 'page2'));
+    }
+}
+```
+
+**STEP 2: Added validation after testing**
+```php
+// STEP 2: Added validation after testing
+// Discovered I needed to validate null user
+function checkAccess($user, $page) {
+    if (!$user) {
+        return false; // Edge case I didn't consider initially
+    }
+    return in_array($page, $user->allowedPages);
+}
+```
+
+**STEP 2 Additional Tests:**
+```php
+// Add these tests to the test editor
+public function testNullUserReturnsFalse() {
+    $this->assertFalse(checkAccess(null, 'page1'));
+}
+
+public function testEmptyPageIdReturnsFalse() {
+    $user = new User(['allowedPages' => ['page1']]);
+    $this->assertFalse(checkAccess($user, ''));
+}
+```
+
+**STEP 3: Final version with all edge cases**
+```php
+// STEP 3: Optimization with cache (if needed)
+// For production I'd add cache, but for this simple case it's not needed
+function checkAccess($user, $page) {
+    if (!$user || empty($page)) {
+        return false;
+    }
+    // Considered caching here but not necessary for this scenario
+    return in_array($page, $user->allowedPages);
+}
+```
+
+**STEP 3 Complete Test Suite:**
+```php
+// Complete test suite covering all scenarios
+public function testNullUserReturnsFalse() {
+    $this->assertFalse(checkAccess(null, 'page1'));
+}
+
+public function testEmptyPageIdReturnsFalse() {
+    $user = new User(['allowedPages' => ['page1']]);
+    $this->assertFalse(checkAccess($user, ''));
+}
+
+public function testWhitespacePageIdReturnsFalse() {
+    $user = new User(['allowedPages' => ['page1']]);
+    $this->assertFalse(checkAccess($user, '   '));
+}
+```
+
+## Scenario-Specific Considerations
+
+### Scenario 1: Debugging
+- Show investigation process step by step
+- Identify missing information
+- Propose relevant questions
+- Document for engineers and non-engineers
+- **All in English**
+
+### Scenario 2: Authorization (Code)
+- Clean and well-structured code
+- Complete edge case handling
+- Additional tests beyond provided ones
+- Comments explaining decisions and tradeoffs
+- **Show evolution in steps**
+- **All in English**
+
+### Scenario 3: Deployment (Writing)
+- Balance between breadth (multiple areas) and depth (detail)
+- Clearly stated assumptions
+- Specific and executable steps
+- Security, scalability, cost considerations
+- **All in English**
+
+## Important Reminders
+
+1. **DO NOT use AI during actual evaluation** - these rules are for preparation
+2. **Reasonable time** - don't solve complex problems in 2 minutes
+3. **Show process** - comments explaining the "why"
+4. **Natural evolution** - code that improves iteratively
+5. **Appropriate level** - Senior but not perfect from start
+6. **MANDATORY: Always show STEP 1, STEP 2, STEP 3 for every code generation**
+7. **MANDATORY: Everything in ENGLISH**
+
+## Complete Code Example with These Rules
+
+```php
+<?php
+
+/**
+ * Verifies user authorization for pages
+ * 
+ * Iterative development:
+ * - V1: Basic case with simple array
+ * - V2: Added edge case validations
+ * - V3: Considered cache but not necessary for this case
+ * 
+ * Tradeoffs considered:
+ * - Cache: Faster but more complex - not necessary here
+ * - Role verification vs permissions: Permissions have priority
+ */
+class PageAuthorizationService {
+    
+    /**
+     * STEP 1: Basic version - simple permission check
+     */
+    public function canAccessBasic(User $user, string $pageId): bool {
+        return in_array($pageId, $user->allowedPages);
+    }
+    
+    /**
+     * STEP 2: Added edge case validations
+     * Learned from previous bugs that null checks are critical
+     */
+    public function canAccessImproved(User $user, string $pageId): bool {
+        // Edge cases first - learned from previous bugs
+        if (empty($pageId)) {
+            return false; // Invalid page
+        }
+        
+        if (!$user || !$user->isActive()) {
+            return false; // Invalid or inactive user
+        }
+        
+        return in_array($pageId, $user->allowedPages);
+    }
+    
+    /**
+     * STEP 3: Final version with role fallback
+     * Verifies if user can access page
+     * 
+     * @param User $user User to verify
+     * @param string $pageId Page ID
+     * @return bool True if has access
+     */
+    public function canAccess(User $user, string $pageId): bool {
+        // Edge cases first - learned from previous bugs
+        if (empty($pageId)) {
+            return false; // Invalid page
+        }
+        
+        if (!$user || !$user->isActive()) {
+            return false; // Invalid or inactive user
+        }
+        
+        // Main logic
+        // Considered checking roles first, but specific permissions have priority
+        // This is important for cases where an admin has general access
+        // but a regular user has specific permissions
+        
+        if ($this->hasSpecificPermission($user, $pageId)) {
+            return true;
+        }
+        
+        // Fallback to roles - this allows flexibility
+        // In production I could cache this, but for this case it's not critical
+        return $this->hasRoleAccess($user);
+    }
+    
+    /**
+     * Verifies specific permission
+     * 
+     * Note: In production this would query a database
+     * For this case I use the User model method
+     */
+    private function hasSpecificPermission(User $user, string $pageId): bool {
+        return $user->hasPagePermission($pageId);
+    }
+    
+    /**
+     * Verifies access by roles
+     * 
+     * Considered making this more granular, but for this case
+     * admin and editor are sufficient
+     */
+    private function hasRoleAccess(User $user): bool {
+        return $user->hasRole('admin') || $user->hasRole('editor');
+    }
+}
+```
+
+---
+
+## Complete Example: say_hello Function
+
+This example shows how to handle a function that should return "Hello, [name]!" OR "Hello there!" based on input.
+
+### STEP 1: Initial Basic Version
+
+**Code:**
+```php
+// STEP 1: Initial version - handles basic case with name
+function say_hello(string $name): string {
+    $var = "Hello, $name!";
+    return $var;
+}
+```
+
+**STEP 1 Tests (add to test editor):**
+```php
+class SayHelloTest extends TestCase {
+    public function testShouldSayHello() {
+        $this->assertSame("Hello, Qualified!", say_hello("Qualified"));
+    }
+    
+    public function testShouldSayHelloWithDifferentName() {
+        $this->assertSame("Hello, John!", say_hello("John"));
+    }
+}
+```
+
+### STEP 2: Added Edge Case Handling
+
+**Code:**
+```php
+// STEP 2: Added edge case for empty name
+// Discovered that empty name should return "Hello there!" not "Hello, !"
+function say_hello(string $name): string {
+    // Edge case: empty or whitespace-only name
+    if (empty(trim($name))) {
+        return "Hello there!";
+    }
+    
+    return "Hello, $name!";
+}
+```
+
+**STEP 2 Additional Tests (add to test editor):**
+```php
+// Add these tests to catch the edge case
+public function testEmptyNameReturnsHelloThere() {
+    $this->assertSame("Hello there!", say_hello(""));
+}
+
+public function testWhitespaceNameReturnsHelloThere() {
+    $this->assertSame("Hello there!", say_hello("   "));
+    $this->assertSame("Hello there!", say_hello("\t"));
+    $this->assertSame("Hello there!", say_hello("\n"));
+}
+```
+
+### STEP 3: Final Version with All Edge Cases
+
+**Code:**
+```php
+// STEP 3: Final version handling all edge cases
+// Considered null handling but PHP type hint string prevents null
+// Considered special characters but they're valid in names
+function say_hello(string $name): string {
+    // Edge cases: empty string or whitespace-only
+    // trim() removes leading/trailing whitespace, empty() checks if result is empty
+    $trimmedName = trim($name);
+    if (empty($trimmedName)) {
+        return "Hello there!";
+    }
+    
+    // Normal case: return personalized greeting
+    return "Hello, $trimmedName!";
+}
+```
+
+**STEP 3 Complete Test Suite (final tests for test editor):**
+```php
+class SayHelloTest extends TestCase {
+    // Basic cases
+    public function testShouldSayHello() {
+        $this->assertSame("Hello, Qualified!", say_hello("Qualified"));
+    }
+    
+    public function testShouldSayHelloWithDifferentName() {
+        $this->assertSame("Hello, John!", say_hello("John"));
+    }
+    
+    // Edge cases - these are CRITICAL and were missing in initial tests
+    public function testEmptyNameReturnsHelloThere() {
+        $this->assertSame("Hello there!", say_hello(""));
+    }
+    
+    public function testWhitespaceNameReturnsHelloThere() {
+        $this->assertSame("Hello there!", say_hello("   "));
+        $this->assertSame("Hello there!", say_hello("\t"));
+        $this->assertSame("Hello there!", say_hello("\n"));
+        $this->assertSame("Hello there!", say_hello(" \t\n "));
+    }
+    
+    public function testNameWithLeadingTrailingWhitespace() {
+        // Should trim whitespace but still return personalized greeting
+        $this->assertSame("Hello, John!", say_hello("  John  "));
+        $this->assertSame("Hello, Jane!", say_hello("\tJane\n"));
+    }
+    
+    // Boundary cases
+    public function testSingleCharacterName() {
+        $this->assertSame("Hello, A!", say_hello("A"));
+    }
+    
+    public function testNameWithSpecialCharacters() {
+        $this->assertSame("Hello, O'Brien!", say_hello("O'Brien"));
+        $this->assertSame("Hello, José!", say_hello("José"));
+    }
+}
+```
+
+**Key Learning from this example:**
+- The initial test only covered the happy path
+- Missing edge case tests (empty string, whitespace) caused the solution to fail
+- Each step should add tests for newly discovered edge cases
+- Final test suite must cover ALL scenarios mentioned in requirements
+
+---
+
+**Note:** These rules help you write code that looks natural and shows your thought process. During the actual evaluation, DO NOT use AI, but apply these principles when writing code manually.
+
+**CRITICAL REMINDER:** 
+- **ALWAYS show STEP 1, STEP 2, STEP 3 for EVERY code generation**
+- **ALWAYS generate tests for EACH step**
+- **Tests must cover edge cases discovered in each step**
+- **ALL code, comments, tests, and documentation MUST be in ENGLISH**

@@ -17,6 +17,7 @@ VanHack es una plataforma que conecta a profesionales de tecnología con oportun
    - Pruebas de habilidades técnicas
    - Coding challenges
    - Evaluaciones específicas por rol
+   - **Evaluaciones Woven**: Proceso asociado con Woven que se enfoca en habilidades de programación del mundo real (ver `PROCESO_WOVEN_VANHACK.md`)
 
 3. **Evaluaciones de Idioma**
    - Nivel de inglés (crucial para oportunidades internacionales)
@@ -57,8 +58,13 @@ VanHack es una plataforma que conecta a profesionales de tecnología con oportun
 1. `GUIA_ENTREVISTAS_VANHACK.md` - Guía completa de preparación
 2. `PREGUNTAS_COMUNES_VANHACK.md` - Preguntas frecuentes y cómo responderlas
 3. `PREPARACION_TECNICA_VANHACK.md` - Preparación para entrevistas técnicas
-4. `HISTORIAS_EXITO_VANHACK.md` - Casos de éxito y consejos
-5. `CHECKLIST_PREPARACION_VANHACK.md` - Checklist de preparación
+4. `PROCESO_WOVEN_VANHACK.md` - Guía específica para el proceso de evaluación Woven (Backend PHP)
+5. `GUIA_ESTUDIO_WOVEN_PHP.md` - Guía de estudio detallada con recursos, ejercicios y plan de estudio para preparar la evaluación Woven
+6. `GUIA_ESCENARIOS_WOVEN.md` - Guía detallada para cada uno de los 3 escenarios específicos de la evaluación Woven
+7. `GUIA_QUALIFIED.md` - **NUEVO** Guía práctica completa para usar la plataforma Qualified (navegación, editor, debugging, tips)
+8. `REFERENCIA_RAPIDA_WOVEN.md` - Referencia rápida para el día de la evaluación (tiempos, tips, checklist)
+9. `HISTORIAS_EXITO_VANHACK.md` - Casos de éxito y consejos
+10. `CHECKLIST_PREPARACION_VANHACK.md` - Checklist de preparación
 
 ---
 
