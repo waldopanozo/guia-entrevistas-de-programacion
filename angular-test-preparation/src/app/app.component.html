@@ -1,0 +1,20 @@
+<div class="container">
+  <div class="card">
+    <h1>🎯 Test Preparation - Práctica de Entrevistas</h1>
+    
+    <div *ngIf="!selectedExam">
+      <app-exam-selector (examSelected)="onExamSelected($event)"></app-exam-selector>
+    </div>
+    
+    <div *ngIf="selectedExam === 'speechace'">
+      <button class="btn btn-secondary" (click)="onBack()">← Volver</button>
+      <app-speech-ace></app-speech-ace>
+    </div>
+    
+    <div *ngIf="selectedExam && selectedExam !== 'speechace'">
+      <button class="btn btn-secondary" (click)="onBack()">← Volver</button>
+      <h2>Próximamente: {{ selectedExam }}</h2>
+      <p>Esta funcionalidad estará disponible pronto.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<h2>Selecciona el tipo de examen</h2>
+<p>Elige el tipo de práctica que deseas realizar:</p>
+
+<div class="exam-grid">
+  <div class="exam-card" *ngFor="let exam of exams" (click)="selectExam(exam.id)">
+    <h3>{{ exam.name }}</h3>
+    <p>{{ exam.description }}</p>
+  </div>
+</div>

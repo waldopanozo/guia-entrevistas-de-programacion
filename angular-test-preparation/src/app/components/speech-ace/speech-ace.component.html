@@ -1,0 +1,53 @@
+<h2>🎤 SpeechAce - Práctica de Examen de Inglés</h2>
+<p>Selecciona una pregunta y practica tu respuesta con el cronómetro de 4 minutos.</p>
+
+<div class="card" *ngIf="!selectedQuestion">
+  <h3>Preguntas Disponibles</h3>
+  <ul class="questions-list">
+    <li 
+      class="question-item" 
+      *ngFor="let question of questions"
+      (click)="selectQuestion(question)">
+      {{ question.id }}. {{ question.title }}
+    </li>
+  </ul>
+</div>
+
+<div class="card" *ngIf="selectedQuestion">
+  <h3>{{ selectedQuestion.title }}</h3>
+  
+  <div class="timer" [ngClass]="getTimerClass()">
+    {{ formatTime(timeRemaining) }}
+  </div>
+
+  <div class="time-segments">
+    <div class="time-segment" [class.active]="currentSegment === 'intro'">
+      <h4>Introducción</h4>
+      <p>Minuto 1</p>
+    </div>
+    <div class="time-segment" [class.active]="currentSegment === 'development'">
+      <h4>Desarrollo</h4>
+      <p>Minutos 2-3</p>
+    </div>
+    <div class="time-segment" [class.active]="currentSegment === 'conclusion'">
+      <h4>Conclusión</h4>
+      <p>Minuto 4</p>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button 
+      class="btn" 
+      [ngClass]="isTimerRunning ? 'btn-danger' : 'btn-success'"
+      (click)="startTimer()">
+      {{ isTimerRunning ? '⏸ Pausar' : '▶ Iniciar' }}
+    </button>
+    <button class="btn btn-secondary" (click)="resetTimer()">🔄 Reiniciar</button>
+    <button class="btn btn-secondary" (click)="selectedQuestion = null">← Volver a Preguntas</button>
+  </div>
+
+  <div class="answer-display">
+    <h4>Respuesta de Ejemplo:</h4>
+    <p>{{ selectedQuestion.answer }}</p>
+  </div>
+</div>
