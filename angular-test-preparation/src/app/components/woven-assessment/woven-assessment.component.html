@@ -132,6 +132,103 @@
         (click)="stopTimer(selectedScenario.id)">
         🔄 Reiniciar
       </button>
+      <button 
+        class="btn"
+        [ngClass]="showCursorPanel ? 'btn-primary' : 'btn-outline-primary'"
+        (click)="toggleCursorPanel()">
+        {{ connectionStatus ? '🤖 Cursor' : '🔌 Conectar Cursor' }}
+        <span *ngIf="connectionStatus" class="status-dot connected"></span>
+        <span *ngIf="!connectionStatus" class="status-dot disconnected"></span>
+      </button>
+      <button 
+        *ngIf="!connectionStatus"
+        class="btn btn-sm btn-outline-secondary"
+        (click)="reconnectCursor()">
+        🔄 Reconectar
+      </button>
+    </div>
+
+    <!-- Panel de Cursor -->
+    <div *ngIf="showCursorPanel" class="cursor-panel">
+      <div class="cursor-panel-header">
+        <h3>🤖 Asistente Cursor</h3>
+        <button class="btn btn-sm btn-secondary" (click)="toggleCursorPanel()">✕</button>
+      </div>
+
+      <div class="cursor-status" [ngClass]="connectionStatus ? 'connected' : 'disconnected'">
+        <span class="status-indicator" [ngClass]="connectionStatus ? 'connected' : 'disconnected'"></span>
+        <span>{{ connectionStatus ? 'Conectado' : 'Desconectado' }}</span>
+        <button *ngIf="!connectionStatus" class="btn btn-sm btn-link" (click)="reconnectCursor()">Reconectar</button>
+      </div>
+
+      <!-- Botones rápidos -->
+      <div class="cursor-quick-actions">
+        <button class="btn btn-sm btn-outline-primary" (click)="askAboutScenario(selectedScenario.id)">
+          💡 Estrategia del Escenario
+        </button>
+        <button class="btn btn-sm btn-outline-primary" (click)="askAboutStrategy()">
+          📋 Estrategia Completa
+        </button>
+      </div>
+
+      <!-- Input de instrucción -->
+      <div class="cursor-input-container">
+        <textarea 
+          [(ngModel)]="cursorInstruction"
+          class="cursor-input"
+          placeholder="Escribe tu pregunta o instrucción aquí... (ej: 'Explícame la estrategia paso a paso')"
+          rows="3"
+          [disabled]="isProcessing || !connectionStatus">
+        </textarea>
+        <button 
+          class="btn btn-primary"
+          (click)="sendCursorInstruction()"
+          [disabled]="!cursorInstruction.trim() || isProcessing || !connectionStatus">
+          {{ isProcessing ? '⏳ Procesando...' : '📤 Enviar' }}
+        </button>
+      </div>
+
+      <!-- Respuestas -->
+      <div id="cursor-responses" class="cursor-responses">
+        <div *ngIf="cursorResponses.length === 0" class="cursor-empty">
+          <p>Las respuestas de Cursor aparecerán aquí...</p>
+          <p class="hint">Prueba con: "Muéstrame la estrategia detallada para este escenario"</p>
+        </div>
+        
+        <div 
+          *ngFor="let response of cursorResponses; let i = index"
+          class="cursor-response"
+          [ngClass]="getResponseClass(response)">
+          <div class="response-header">
+            <span class="response-icon">{{ getResponseIcon(response) }}</span>
+            <span class="response-type">{{ response.type }}</span>
+            <span *ngIf="response.progress" class="response-progress">{{ response.progress | number:'1.0-0' }}%</span>
+          </div>
+          
+          <div class="response-content">
+            <p *ngIf="response.message">{{ response.message }}</p>
+            <p *ngIf="response.chunk" class="stream-chunk">{{ response.chunk }}</p>
+            
+            <div *ngIf="response.result" class="result-content">
+              <div *ngIf="response.result.suggestions && response.result.suggestions.length > 0">
+                <h5>Sugerencias:</h5>
+                <ul>
+                  <li *ngFor="let suggestion of response.result.suggestions">{{ suggestion }}</li>
+                </ul>
+              </div>
+              <pre *ngIf="response.result.examInfo">{{ response.result.examInfo | json }}</pre>
+            </div>
+
+            <div *ngIf="response.data" class="exam-data">
+              <pre>{{ response.data | json }}</pre>
+            </div>
+
+            <div *ngIf="response.error" class="error-message">
+              {{ response.error }}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="scenario-content">

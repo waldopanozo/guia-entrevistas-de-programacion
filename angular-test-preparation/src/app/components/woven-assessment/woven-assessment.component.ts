@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { QuestionsService } from '../../services/questions.service';
+import { CursorBridgeService, ProcessResponse } from '../../services/cursor-bridge.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 
@@ -57,17 +58,47 @@ export class WovenAssessmentComponent implements OnInit, OnDestroy {
   selectedScenario: WovenScenario | null = null;
   scenarioTimers: Map<number, { running: boolean; remaining: number; interval: any }> = new Map();
 
+  // Cursor Bridge properties
+  showCursorPanel = false;
+  cursorInstruction = '';
+  cursorResponses: ProcessResponse[] = [];
+  isProcessing = false;
+  connectionStatus = false;
+  private cursorSubscriptions: Subscription[] = [];
+
   constructor(
     private http: HttpClient,
-    private questionsService: QuestionsService
+    private questionsService: QuestionsService,
+    private cursorBridge: CursorBridgeService
   ) {}
 
   ngOnInit() {
     this.loadWovenConfig();
+    this.setupCursorBridge();
   }
 
   ngOnDestroy() {
     this.stopAllTimers();
+    this.cursorSubscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  setupCursorBridge() {
+    // Suscribirse al estado de conexión
+    this.cursorBridge.connectionStatus$.subscribe(status => {
+      this.connectionStatus = status;
+    });
+
+    // Suscribirse a mensajes del bridge
+    const messagesSub = this.cursorBridge.messages$.subscribe(message => {
+      this.handleCursorMessage(message);
+    });
+    this.cursorSubscriptions.push(messagesSub);
+
+    // Suscribirse a datos de examen
+    const examDataSub = this.cursorBridge.examData$.subscribe(data => {
+      console.log('Exam data received:', data);
+    });
+    this.cursorSubscriptions.push(examDataSub);
   }
 
   loadWovenConfig() {
@@ -188,5 +219,138 @@ export class WovenAssessmentComponent implements OnInit, OnDestroy {
 
   backToScenarios() {
     this.selectedScenario = null;
+    this.showCursorPanel = false;
+    this.cursorResponses = [];
+  }
+
+  // ============================================
+  // Cursor Bridge Methods
+  // ============================================
+
+  toggleCursorPanel() {
+    this.showCursorPanel = !this.showCursorPanel;
+    if (this.showCursorPanel && !this.connectionStatus) {
+      this.cursorBridge.reconnect();
+    }
+  }
+
+  sendCursorInstruction() {
+    if (!this.cursorInstruction.trim()) {
+      return;
+    }
+
+    this.isProcessing = true;
+    this.cursorResponses = [];
+
+    // Agregar instrucción a las respuestas
+    this.cursorResponses.push({
+      type: 'processing',
+      message: `Enviando: ${this.cursorInstruction}`,
+      examId: 'woven'
+    });
+
+    // Enviar instrucción
+    const instruction = this.cursorInstruction;
+    this.cursorInstruction = ''; // Limpiar input
+
+    // Procesar instrucción
+    const processSub = this.cursorBridge.processInstruction({
+      examId: 'woven',
+      instruction: instruction,
+      stream: true
+    }).subscribe({
+      next: (response) => {
+        // Las respuestas se manejan en handleCursorMessage
+      },
+      error: (error) => {
+        console.error('Error processing instruction:', error);
+        this.cursorResponses.push({
+          type: 'error',
+          message: `Error: ${error.message || 'Unknown error'}`
+        });
+        this.isProcessing = false;
+      },
+      complete: () => {
+        this.isProcessing = false;
+      }
+    });
+
+    this.cursorSubscriptions.push(processSub);
+  }
+
+  handleCursorMessage(message: ProcessResponse) {
+    this.cursorResponses.push(message);
+
+    // Scroll al final de las respuestas
+    setTimeout(() => {
+      const responsesContainer = document.getElementById('cursor-responses');
+      if (responsesContainer) {
+        responsesContainer.scrollTop = responsesContainer.scrollHeight;
+      }
+    }, 100);
+
+    // Marcar como completado si es necesario
+    if (message.type === 'complete' || message.type === 'error') {
+      this.isProcessing = false;
+    }
+  }
+
+  getResponseClass(response: ProcessResponse): string {
+    switch (response.type) {
+      case 'connected':
+        return 'response-success';
+      case 'processing':
+        return 'response-info';
+      case 'stream_chunk':
+        return 'response-stream';
+      case 'result':
+      case 'stream_result':
+        return 'response-result';
+      case 'complete':
+        return 'response-success';
+      case 'error':
+        return 'response-error';
+      default:
+        return 'response-default';
+    }
+  }
+
+  getResponseIcon(response: ProcessResponse): string {
+    switch (response.type) {
+      case 'connected':
+        return '✅';
+      case 'processing':
+        return '⏳';
+      case 'stream_chunk':
+        return '📝';
+      case 'result':
+      case 'stream_result':
+        return '💡';
+      case 'complete':
+        return '✅';
+      case 'error':
+        return '❌';
+      default:
+        return 'ℹ️';
+    }
+  }
+
+  askAboutScenario(scenarioId: number) {
+    if (!this.selectedScenario) return;
+
+    const scenario = this.selectedScenario;
+    this.cursorInstruction = `Muéstrame la estrategia detallada para el escenario "${scenario.title}" paso a paso, incluyendo los conceptos clave y áreas importantes`;
+    this.sendCursorInstruction();
+  }
+
+  askAboutStrategy() {
+    if (!this.selectedScenario) return;
+
+    this.cursorInstruction = `Explícame la estrategia completa para resolver este escenario, incluyendo todas las fases y tareas`;
+    this.sendCursorInstruction();
+  }
+
+  reconnectCursor() {
+    this.cursorBridge.reconnect();
   }
 }

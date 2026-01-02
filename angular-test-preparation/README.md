@@ -9,6 +9,8 @@ Aplicación Angular completa para practicar diferentes tipos de exámenes técni
 - ✅ **Auto-scroll y marcado de párrafos** para práctica de speaking
 - ✅ **Indicadores de tiempo por párrafo** (adelantado/atrasado/en tiempo)
 - ✅ **Integración con Cursor** mediante servidor MCP
+- ✅ **Bridge Server** para comunicación bidireccional Angular ↔ Cursor
+- ✅ **Panel de Cursor en tiempo real** en componentes (ej: Woven)
 - ✅ **Sistema modular** fácil de extender
 - ✅ **Hot-reload configurado** para WSL
 
@@ -29,6 +31,7 @@ Aplicación Angular completa para practicar diferentes tipos de exámenes técni
 - Estrategias detalladas por fase
 - Code of Conduct y tips
 - Cronómetros individuales por escenario
+- **🤖 Panel de Cursor integrado** para consultas en tiempo real
 
 ### 3. Examen 360 - Senior 📝 ⏳
 - 100 preguntas de selección múltiple
@@ -139,6 +142,24 @@ El servidor MCP está **configurado y funcionando**. Deberías ver "angular-test
 El agente automáticamente usará los recursos MCP para responder.
 
 **📖 Guía Completa:** [COMO_USAR_MCP.md](./COMO_USAR_MCP.md) - **¡Lee esto para aprender a usar el MCP!**
+
+### 🌉 Bridge Server (Comunicación Bidireccional)
+
+Además del MCP, la aplicación incluye un **Bridge Server** que permite comunicación bidireccional entre Angular y Cursor:
+
+- ✅ **WebSocket** para comunicación en tiempo real
+- ✅ **API REST** para consultas síncronas
+- ✅ **Panel integrado** en componentes (ej: Woven)
+- ✅ **Respuestas en tiempo real** directamente en la UI
+
+**Para usar el Bridge Server:**
+
+1. Instala dependencias: `cd bridge-server && npm install`
+2. Inicia el servidor: `npm start`
+3. Abre un escenario en Woven y haz clic en "🤖 Cursor"
+4. Escribe instrucciones y recibe respuestas en tiempo real
+
+**📖 Guía Completa:** [INSTALACION_BRIDGE_SERVER.md](./INSTALACION_BRIDGE_SERVER.md)
 
 ### Recursos Disponibles para el Agente
 
