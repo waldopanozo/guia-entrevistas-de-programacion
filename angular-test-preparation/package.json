@@ -4,7 +4,8 @@
   "description": "Aplicación de práctica para entrevistas y exámenes",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --poll=1000",
+    "start:watch": "ng serve --poll=1000 --watch",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

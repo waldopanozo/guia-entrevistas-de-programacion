@@ -1,1 +1,130 @@
 /* Estilos específicos del componente SpeechAce */
+
+.answer-paragraphs {
+  line-height: 1.8;
+}
+
+.paragraph-wrapper {
+  margin-bottom: 1.5em;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.paragraph-text {
+  padding: 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+  margin: 0;
+}
+
+.paragraph-wrapper.read-paragraph .paragraph-text {
+  opacity: 0.6;
+  background-color: #e8f5e9;
+  border-left-color: #4caf50;
+}
+
+.paragraph-wrapper.current-paragraph .paragraph-text {
+  background-color: #fff3cd;
+  border-left-color: #ffc107;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+  animation: pulse-highlight 2s ease-in-out infinite;
+}
+
+/* Indicadores de tiempo por párrafo */
+.paragraph-time-indicator {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 10;
+}
+
+.time-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.time-badge.ahead {
+  color: #28a745;
+  background-color: #d4edda;
+  border: 1px solid #28a745;
+}
+
+.time-badge.behind {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #dc3545;
+  animation: pulse-warning 1.5s ease-in-out infinite;
+}
+
+.time-badge.on-time {
+  color: #ffc107;
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+}
+
+/* Colores de fondo para párrafos según tiempo */
+.paragraph-wrapper.time-ahead .paragraph-text {
+  border-left-color: #28a745;
+  background-color: #f0f9f4;
+}
+
+.paragraph-wrapper.time-behind .paragraph-text {
+  border-left-color: #dc3545;
+  background-color: #fff5f5;
+}
+
+.paragraph-wrapper.time-on-time .paragraph-text {
+  border-left-color: #ffc107;
+}
+
+@keyframes pulse-warning {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes pulse-highlight {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(255, 193, 7, 0.3);
+  }
+  50% {
+    box-shadow: 0 2px 12px rgba(255, 193, 7, 0.5);
+  }
+}
+
+#answer-container {
+  scroll-behavior: smooth;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+/* Scrollbar personalizado */
+#answer-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+#answer-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+#answer-container::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 4px;
+}
+
+#answer-container::-webkit-scrollbar-thumb:hover {
+  background: #5568d3;
+}

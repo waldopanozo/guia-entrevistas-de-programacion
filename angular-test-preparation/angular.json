@@ -58,17 +58,24 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "poll": 1000
+          },
           "configurations": {
             "production": {
               "buildTarget": "angular-test-preparation:build:production"
             },
             "development": {
-              "buildTarget": "angular-test-preparation:build:development"
+              "buildTarget": "angular-test-preparation:build:development",
+              "poll": 1000
             }
           },
           "defaultConfiguration": "development"
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }
