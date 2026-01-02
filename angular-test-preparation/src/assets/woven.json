@@ -1,0 +1,321 @@
+{
+  "examType": "woven",
+  "name": "Woven - Evaluación Técnica VanHack",
+  "description": "3 escenarios técnicos: Debugging, Autorización y Deployment",
+  "timeConfig": {
+    "totalTime": 2880,
+    "segments": [
+      {
+        "name": "debugging",
+        "label": "Escenario 1: Debugging",
+        "description": "Debugging a Problem with Limited Information",
+        "duration": 35,
+        "startTime": 2845
+      },
+      {
+        "name": "authorization",
+        "label": "Escenario 2: Autorización",
+        "description": "Check Which Pages Users Are Authorized to Access",
+        "duration": 45,
+        "startTime": 2800
+      },
+      {
+        "name": "deployment",
+        "label": "Escenario 3: Deployment",
+        "description": "Describe Basic Steps in Deploying SPA with Cloud Service",
+        "duration": 20,
+        "startTime": 2780
+      }
+    ]
+  },
+  "instructions": "Tienes 48 horas para completar los 3 escenarios. Cada escenario tiene su tiempo límite individual. Puedes tomar descansos entre escenarios. NO uses AI (ChatGPT, etc.) - es descalificación automática. Puedes investigar y citar fuentes si usas código de otros.",
+  "scenarios": [
+    {
+      "id": 1,
+      "title": "Debugging a Problem with Limited Information",
+      "timeLimit": 35,
+      "type": "analysis",
+      "description": "Analiza un problema con información limitada. Documenta tu proceso de investigación y comunica tanto a técnicos como no-técnicos.",
+      "objectives": [
+        "Cómo reúnes información sobre un problema",
+        "Cómo investigas issues",
+        "Cómo documentas para otros",
+        "Comunicación técnica y no-técnica"
+      ],
+      "strategy": [
+        {
+          "phase": "Leer y entender",
+          "duration": 5,
+          "tasks": [
+            "Leer el bug report completamente",
+            "Identificar qué información tienes",
+            "Identificar qué información falta",
+            "Entender el contexto del problema"
+          ]
+        },
+        {
+          "phase": "Investigar y analizar",
+          "duration": 20,
+          "tasks": [
+            "Listar pasos de investigación",
+            "Identificar herramientas y recursos a usar",
+            "Documentar hipótesis",
+            "Planear cómo reunir información faltante"
+          ]
+        },
+        {
+          "phase": "Documentar",
+          "duration": 5,
+          "tasks": [
+            "Documentar el proceso de debugging",
+            "Crear documentación para otros",
+            "Escribir explicaciones claras"
+          ]
+        },
+        {
+          "phase": "Comunicar",
+          "duration": 5,
+          "tasks": [
+            "Escribir comunicación para ingenieros",
+            "Escribir comunicación para no-ingenieros",
+            "Revisar y pulir"
+          ]
+        }
+      ],
+      "keyPoints": [
+        "Usa logging y análisis de logs",
+        "Revisa stack traces",
+        "Documenta tu proceso claramente",
+        "Explica el problema a diferentes audiencias"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Check Which Pages Users Are Authorized to Access",
+      "timeLimit": 45,
+      "type": "coding",
+      "description": "Implementa un sistema de autorización que verifique qué páginas puede acceder un usuario según sus permisos.",
+      "objectives": [
+        "Código que resuelve el problema",
+        "Manejo de casos edge",
+        "Nombres claros y buena estructura",
+        "Tests adicionales",
+        "Comentarios útiles"
+      ],
+      "strategy": [
+        {
+          "phase": "Entender problema",
+          "duration": 5,
+          "tasks": [
+            "Leer requisitos completamente",
+            "Identificar casos edge",
+            "Clarificar dudas si es necesario"
+          ]
+        },
+        {
+          "phase": "Planear solución",
+          "duration": 5,
+          "tasks": [
+            "Diseñar estructura de código",
+            "Identificar funciones/métodos necesarios",
+            "Planear manejo de casos edge"
+          ]
+        },
+        {
+          "phase": "Implementar",
+          "duration": 25,
+          "tasks": [
+            "Escribir código limpio",
+            "Usar nombres descriptivos",
+            "Manejar casos edge",
+            "Agregar comentarios útiles"
+          ]
+        },
+        {
+          "phase": "Revisar y refactorizar",
+          "duration": 5,
+          "tasks": [
+            "Revisar código",
+            "Refactorizar si es necesario",
+            "Verificar que todos los casos funcionan"
+          ]
+        },
+        {
+          "phase": "Pulir y documentar",
+          "duration": 5,
+          "tasks": [
+            "Agregar tests si es posible",
+            "Documentar decisiones importantes",
+            "Revisar una última vez"
+          ]
+        }
+      ],
+      "keyPoints": [
+        "RBAC / Sistema de permisos",
+        "Casos edge: usuario sin permisos, página inexistente",
+        "Tests completos",
+        "Código limpio y bien estructurado",
+        "Comentarios que explican decisiones"
+      ],
+      "concepts": [
+        "Role-Based Access Control (RBAC)",
+        "Manejo de permisos",
+        "Validación de rutas/páginas",
+        "Casos edge y error handling"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Describe Basic Steps in Deploying SPA with Cloud Service",
+      "timeLimit": 20,
+      "type": "documentation",
+      "description": "Describe los pasos básicos para desplegar una Single Page Application usando un servicio cloud. Buscan breadth (amplitud) + depth (profundidad).",
+      "objectives": [
+        "Conocimiento de servicios cloud",
+        "Plan claro y ejecutable",
+        "Breadth (amplitud) + Depth (profundidad)",
+        "3 áreas con detalle > 1 área muy detallada"
+      ],
+      "strategy": [
+        {
+          "phase": "Planear y elegir proveedor",
+          "duration": 2,
+          "tasks": [
+            "Elegir proveedor cloud (AWS, GCP, Azure, etc.)",
+            "Identificar servicios necesarios"
+          ]
+        },
+        {
+          "phase": "Escribir plan detallado",
+          "duration": 15,
+          "tasks": [
+            "Cubrir Build y preparación",
+            "Cubrir Hosting estático",
+            "Cubrir CDN",
+            "Cubrir DNS y routing",
+            "Mencionar CI/CD (opcional)",
+            "Mencionar Monitoring/Seguridad",
+            "Profundizar en 3 áreas clave"
+          ]
+        },
+        {
+          "phase": "Revisar breadth/depth",
+          "duration": 2,
+          "tasks": [
+            "Verificar que cubres múltiples áreas",
+            "Asegurar profundidad en áreas clave",
+            "Balancear amplitud y profundidad"
+          ]
+        },
+        {
+          "phase": "Pulir",
+          "duration": 1,
+          "tasks": [
+            "Revisar claridad",
+            "Verificar que es ejecutable",
+            "Última revisión"
+          ]
+        }
+      ],
+      "keyPoints": [
+        "Build y preparación de assets",
+        "Hosting estático (S3, Cloud Storage, etc.)",
+        "CDN para distribución global",
+        "DNS y routing",
+        "CI/CD para automatización",
+        "Monitoring y seguridad",
+        "Cubrir 3+ áreas con detalle"
+      ],
+      "areas": [
+        {
+          "name": "Build y Preparación",
+          "details": [
+            "Compilar aplicación (npm build, webpack, etc.)",
+            "Optimizar assets (minificación, compresión)",
+            "Generar archivos estáticos",
+            "Configurar variables de entorno"
+          ]
+        },
+        {
+          "name": "Hosting Estático",
+          "details": [
+            "Elegir servicio (S3, Cloud Storage, Azure Blob)",
+            "Configurar bucket/container",
+            "Subir archivos estáticos",
+            "Configurar permisos y políticas"
+          ]
+        },
+        {
+          "name": "CDN",
+          "details": [
+            "Configurar CDN (CloudFront, Cloud CDN, etc.)",
+            "Conectar con origen (hosting estático)",
+            "Configurar caché",
+            "Optimizar TTL y headers"
+          ]
+        },
+        {
+          "name": "DNS y Routing",
+          "details": [
+            "Configurar dominio",
+            "Crear registros DNS",
+            "Configurar SSL/TLS",
+            "Routing y redirects"
+          ]
+        },
+        {
+          "name": "CI/CD",
+          "details": [
+            "Automatizar build",
+            "Automatizar deploy",
+            "Configurar pipelines",
+            "Testing antes de deploy"
+          ]
+        },
+        {
+          "name": "Monitoring y Seguridad",
+          "details": [
+            "Configurar logging",
+            "Monitoreo de performance",
+            "Alertas",
+            "Seguridad (HTTPS, CORS, etc.)"
+          ]
+        }
+      ]
+    }
+  ],
+  "codeOfConduct": {
+    "allowed": [
+      "Investigar (StackOverflow, blogs, documentación)",
+      "Citar fuentes si usas código de otros"
+    ],
+    "notAllowed": [
+      "Usar AI (ChatGPT, etc.) → Descalificación",
+      "Usar soluciones de otros",
+      "Compartir escenarios o soluciones"
+    ]
+  },
+  "preparation": {
+    "beforeStart": [
+      "Probar editor Qualified en ambiente de práctica",
+      "Revisar conceptos clave",
+      "Leer guía de preparación completamente",
+      "Configurar alarma a las 47 horas"
+    ],
+    "checklist": [
+      "Espacio sin distracciones",
+      "Conexión a internet estable",
+      "Documentación a mano (permitida)",
+      "Alarma configurada a las 47 horas",
+      "Agua/snacks disponibles"
+    ]
+  },
+  "tips": [
+    "Lee completamente cada escenario antes de empezar",
+    "Gestiona el tiempo - no te quedes atascado en un escenario",
+    "Documenta tu proceso - especialmente en debugging",
+    "Comunica claramente - tanto para técnicos como no-técnicos",
+    "Maneja casos edge - muestra pensamiento completo",
+    "Comenta decisiones - explica tradeoffs y por qué elegiste un enfoque"
+  ]
+}

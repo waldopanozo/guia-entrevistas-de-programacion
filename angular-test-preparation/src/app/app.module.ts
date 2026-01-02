@@ -5,12 +5,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { ExamSelectorComponent } from './components/exam-selector/exam-selector.component';
 import { SpeechAceComponent } from './components/speech-ace/speech-ace.component';
+import { WovenAssessmentComponent } from './components/woven-assessment/woven-assessment.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ExamSelectorComponent,
-    SpeechAceComponent
+    SpeechAceComponent,
+    WovenAssessmentComponent
   ],
   imports: [
     BrowserModule,

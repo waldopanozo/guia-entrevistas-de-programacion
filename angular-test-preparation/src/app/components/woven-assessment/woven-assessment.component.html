@@ -1,0 +1,192 @@
+<div class="woven-container">
+  <h2>🔧 Woven - Evaluación Técnica VanHack</h2>
+  
+  <div *ngIf="!config" class="loading">
+    <p>Cargando configuración...</p>
+  </div>
+
+  <div *ngIf="config && !selectedScenario">
+    <!-- Información General -->
+    <div class="info-section">
+      <div class="alert alert-info">
+        <h3>📋 Información General</h3>
+        <p><strong>Tiempo total:</strong> 48 horas para completar todos los escenarios</p>
+        <p><strong>Instrucciones:</strong> {{ config.instructions }}</p>
+      </div>
+    </div>
+
+    <!-- Code of Conduct -->
+    <div class="info-section">
+      <h3>⚖️ Code of Conduct</h3>
+      <div class="code-of-conduct">
+        <div class="allowed">
+          <h4>✅ Permitido:</h4>
+          <ul>
+            <li *ngFor="let item of config.codeOfConduct.allowed">{{ item }}</li>
+          </ul>
+        </div>
+        <div class="not-allowed">
+          <h4>❌ NO Permitido:</h4>
+          <ul>
+            <li *ngFor="let item of config.codeOfConduct.notAllowed">{{ item }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preparación -->
+    <div class="info-section">
+      <h3>📚 Preparación</h3>
+      <div class="preparation-grid">
+        <div>
+          <h4>Antes de Empezar:</h4>
+          <ul>
+            <li *ngFor="let item of config.preparation.beforeStart">{{ item }}</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Checklist:</h4>
+          <ul>
+            <li *ngFor="let item of config.preparation.checklist">{{ item }}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="info-section">
+      <h3>💡 Tips Generales</h3>
+      <ul class="tips-list">
+        <li *ngFor="let tip of config.tips">{{ tip }}</li>
+      </ul>
+    </div>
+
+    <!-- Escenarios -->
+    <div class="scenarios-section">
+      <h3>📋 Escenarios</h3>
+      <div class="scenarios-grid">
+        <div 
+          *ngFor="let scenario of config.scenarios" 
+          class="scenario-card"
+          (click)="selectScenario(scenario)">
+          <div class="scenario-header">
+            <span class="scenario-icon">{{ getScenarioTypeIcon(scenario.type) }}</span>
+            <div class="scenario-info">
+              <h4>Escenario {{ scenario.id }}</h4>
+              <span class="scenario-type">{{ getScenarioTypeLabel(scenario.type) }}</span>
+            </div>
+            <div class="scenario-timer" [ngClass]="getTimerClass(scenario.id)">
+              {{ formatTime(scenarioTimers.get(scenario.id)?.remaining || scenario.timeLimit * 60) }}
+            </div>
+          </div>
+          <h5>{{ scenario.title }}</h5>
+          <p>{{ scenario.description }}</p>
+          <div class="scenario-meta">
+            <span class="time-badge">⏱️ {{ scenario.timeLimit }} minutos</span>
+            <span class="objectives-count">{{ scenario.objectives.length }} objetivos</span>
+          </div>
+          <div class="scenario-controls" (click)="$event.stopPropagation()">
+            <button 
+              class="btn btn-sm"
+              [ngClass]="scenarioTimers.get(scenario.id)?.running ? 'btn-danger' : 'btn-success'"
+              (click)="startTimer(scenario.id)">
+              {{ scenarioTimers.get(scenario.id)?.running ? '⏸ Pausar' : '▶ Iniciar' }}
+            </button>
+            <button 
+              class="btn btn-sm btn-secondary"
+              (click)="stopTimer(scenario.id)">
+              🔄 Reiniciar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vista de Escenario Detallado -->
+  <div *ngIf="config && selectedScenario" class="scenario-detail">
+    <button class="btn btn-secondary" (click)="backToScenarios()">← Volver a Escenarios</button>
+    
+    <div class="scenario-header-detail">
+      <div>
+        <h2>{{ selectedScenario.title }}</h2>
+        <div class="scenario-meta-detail">
+          <span class="type-badge">{{ getScenarioTypeIcon(selectedScenario.type) }} {{ getScenarioTypeLabel(selectedScenario.type) }}</span>
+          <span class="time-badge-large">⏱️ {{ selectedScenario.timeLimit }} minutos</span>
+        </div>
+      </div>
+      <div class="timer-large" [ngClass]="getTimerClass(selectedScenario.id)">
+        {{ formatTime(scenarioTimers.get(selectedScenario.id)?.remaining || selectedScenario.timeLimit * 60) }}
+      </div>
+    </div>
+
+    <div class="scenario-controls-detail">
+      <button 
+        class="btn"
+        [ngClass]="scenarioTimers.get(selectedScenario.id)?.running ? 'btn-danger' : 'btn-success'"
+        (click)="startTimer(selectedScenario.id)">
+        {{ scenarioTimers.get(selectedScenario.id)?.running ? '⏸ Pausar' : '▶ Iniciar' }}
+      </button>
+      <button 
+        class="btn btn-secondary"
+        (click)="stopTimer(selectedScenario.id)">
+        🔄 Reiniciar
+      </button>
+    </div>
+
+    <div class="scenario-content">
+      <div class="section">
+        <h3>📝 Descripción</h3>
+        <p>{{ selectedScenario.description }}</p>
+      </div>
+
+      <div class="section">
+        <h3>🎯 Objetivos</h3>
+        <ul>
+          <li *ngFor="let objective of selectedScenario.objectives">{{ objective }}</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h3>📋 Estrategia por Fases</h3>
+        <div class="strategy-phases">
+          <div *ngFor="let phase of selectedScenario.strategy" class="phase-card">
+            <div class="phase-header">
+              <h4>{{ phase.phase }}</h4>
+              <span class="phase-duration">{{ phase.duration }} min</span>
+            </div>
+            <ul class="phase-tasks">
+              <li *ngFor="let task of phase.tasks">{{ task }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>🔑 Puntos Clave</h3>
+        <ul class="key-points">
+          <li *ngFor="let point of selectedScenario.keyPoints">{{ point }}</li>
+        </ul>
+      </div>
+
+      <div *ngIf="selectedScenario.concepts" class="section">
+        <h3>💡 Conceptos Importantes</h3>
+        <div class="concepts-grid">
+          <span *ngFor="let concept of selectedScenario.concepts" class="concept-badge">{{ concept }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="selectedScenario.areas" class="section">
+        <h3>🌐 Áreas a Cubrir (Deployment)</h3>
+        <div class="areas-grid">
+          <div *ngFor="let area of selectedScenario.areas" class="area-card">
+            <h4>{{ area.name }}</h4>
+            <ul>
+              <li *ngFor="let detail of area.details">{{ detail }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

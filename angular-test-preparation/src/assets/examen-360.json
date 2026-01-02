@@ -1,0 +1,37 @@
+{
+  "examType": "examen-360",
+  "name": "Examen 360 - 100 Preguntas Senior",
+  "description": "Preguntas de selección múltiple con múltiples respuestas correctas",
+  "timeConfig": null,
+  "instructions": "Las preguntas son de selección múltiple. Puede haber más de una respuesta correcta en cada pregunta. Marca todas las opciones que consideres correctas.",
+  "questions": [
+    {
+      "id": 1,
+      "category": "CI/CD",
+      "question": "¿Cuáles de las siguientes son estrategias de despliegue continuo utilizadas en producción?",
+      "options": [
+        { "id": "A", "text": "Blue-Green Deployment" },
+        { "id": "B", "text": "Canary Deployment" },
+        { "id": "C", "text": "Rolling Deployment" },
+        { "id": "D", "text": "Big Bang Deployment" },
+        { "id": "E", "text": "Feature Flag Deployment" }
+      ],
+      "correctAnswers": ["A", "B", "C", "E"],
+      "explanation": "Blue-Green, Canary, Rolling y Feature Flag son estrategias comunes. Big Bang no es una estrategia recomendada para producción."
+    },
+    {
+      "id": 2,
+      "category": "CI/CD",
+      "question": "En un pipeline de CI/CD, ¿qué prácticas ayudan a mejorar el tiempo de ejecución del pipeline?",
+      "options": [
+        { "id": "A", "text": "Paralelización de jobs independientes" },
+        { "id": "B", "text": "Caché de dependencias entre builds" },
+        { "id": "C", "text": "Ejecutar todos los tests en secuencia" },
+        { "id": "D", "text": "Usar matrices para testing en múltiples versiones" },
+        { "id": "E", "text": "Ejecutar jobs condicionales basados en cambios de archivos" }
+      ],
+      "correctAnswers": ["A", "B", "D", "E"],
+      "explanation": "La paralelización, caché, matrices y jobs condicionales mejoran el tiempo. Ejecutar tests en secuencia los empeora."
+    }
+  ]
+}

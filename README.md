@@ -508,11 +508,193 @@ En esta web podrás ver como funcionan de manera visual los siguientes algoritmo
   - [25 Essential AI Concepts Every AI Developer Must Master](https://dev.to/devscriptor/25-essential-ai-concepts-every-ai-developer-must-master-4ddn)
   - [Awesome AI-Powered Developer Tools](https://github.com/jamesmurdza/awesome-ai-devtools)
   - [Best AI tools for developers to use in your next coding project](https://pieces.medium.com/best-ai-tools-for-developers-to-use-in-your-next-coding-project-794fce6bfa42)
-  - [What is MCP? A Beginner’s Guide to Smarter AI](https://medium.com/h7w/what-is-mcp-a-beginners-guide-to-smarter-ai-bdd996f8b02e)
-  - [Understanding Model Context Protocol (MCP): A Beginner’s Guide](https://medium.com/@sailakkshmiallada/understanding-model-context-protocol-mcp-a-beginners-guide-70060304742d)
+  - [What is MCP? A Beginner's Guide to Smarter AI](https://medium.com/h7w/what-is-mcp-a-beginners-guide-to-smarter-ai-bdd996f8b02e)
+  - [Understanding Model Context Protocol (MCP): A Beginner's Guide](https://medium.com/@sailakkshmiallada/understanding-model-context-protocol-mcp-a-beginners-guide-70060304742d)
   - [MCP Introduction](https://modelcontextprotocol.io/introduction)
   - [MCP for beginners by Microsoft](https://github.com/microsoft/mcp-for-beginners)
-  
+
+## 🎯 Aplicación Angular - Preparación de Exámenes Técnicos
+
+Este repositorio incluye una **aplicación Angular completa** para practicar diferentes tipos de exámenes técnicos y de entrevistas.
+
+### 📋 Características Principales
+
+- ✅ **Múltiples tipos de exámenes** soportados
+- ✅ **Cronómetros personalizables** con segmentos de tiempo
+- ✅ **Auto-scroll y marcado de párrafos** para práctica de speaking
+- ✅ **Indicadores de tiempo** por párrafo (adelantado/atrasado/en tiempo)
+- ✅ **Integración con Cursor** mediante servidor MCP
+- ✅ **Sistema modular** fácil de extender
+
+### 🎓 Tipos de Exámenes Soportados
+
+#### 1. **SpeechAce - Examen de Inglés** 🎤
+- Práctica de speaking con tiempos específicos (4 minutos por pregunta)
+- Cronómetro con segmentos: Introducción, Desarrollo, Conclusión
+- Auto-scroll automático
+- Indicadores de tiempo por párrafo
+- **Estado:** ✅ Completamente funcional
+
+#### 2. **Woven - Evaluación Técnica VanHack** 🔧
+- 3 escenarios técnicos:
+  - **Debugging** (35 min) - Análisis y documentación
+  - **Autorización** (45 min) - Implementación de código
+  - **Deployment** (20 min) - Documentación de despliegue
+- Estrategias detalladas por fase
+- Code of Conduct y tips
+- Cronómetros individuales por escenario
+- **Estado:** ✅ Completamente funcional
+
+#### 3. **Examen 360 - Senior** 📝
+- 100 preguntas de selección múltiple
+- Múltiples respuestas correctas posibles
+- Explicaciones y justificaciones
+- **Estado:** ⏳ Estructura creada, componente pendiente
+
+#### 4. **Assure - Senior Software Engineer** 💻
+- Preguntas técnicas con respuestas y justificaciones
+- Enfoque en conocimientos técnicos avanzados
+- **Estado:** ⏳ Estructura creada, componente pendiente
+
+#### 5. **VanHack - Entrevistas** 🌎
+- Preguntas comunes de entrevistas
+- Ejemplos de respuestas
+- Tips y consejos
+- **Estado:** ⏳ Estructura creada, componente pendiente
+
+### 🚀 Inicio Rápido
+
+```bash
+# Navegar al directorio de la aplicación
+cd angular-test-preparation
+
+# Instalar dependencias
+npm install
+
+# Iniciar servidor de desarrollo
+npm start
+
+# La aplicación estará disponible en http://localhost:4200
+```
+
+### 📁 Estructura del Proyecto
+
+```
+angular-test-preparation/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── exam-selector/      # Selector de exámenes
+│   │   │   ├── speech-ace/         # Componente SpeechAce
+│   │   │   └── woven-assessment/   # Componente Woven
+│   │   └── services/
+│   │       └── questions.service.ts # Servicio de preguntas
+│   └── assets/
+│       ├── exam-config.json        # Configuración de exámenes
+│       ├── questions.json          # Preguntas SpeechAce
+│       ├── woven.json              # Configuración Woven
+│       ├── examen-360.json         # Examen 360
+│       ├── assure-senior.json     # Assure Senior
+│       └── vanhack.json            # VanHack
+├── mcp-server/                     # Servidor MCP para Cursor
+│   ├── index.js                    # Servidor MCP
+│   └── run-mcp.sh                  # Script wrapper
+└── .cursor/
+    └── mcp.json                    # Configuración MCP
+```
+
+### 🔌 Integración con Cursor (MCP)
+
+La aplicación está integrada con **Cursor** mediante un servidor **MCP (Model Context Protocol)**, permitiendo que el agente de IA acceda a los recursos de la aplicación.
+
+#### Configuración
+
+1. **Instalar dependencias del servidor MCP:**
+   ```bash
+   cd angular-test-preparation/mcp-server
+   npm install
+   ```
+
+2. **El archivo `.cursor/mcp.json` ya está configurado** - Cursor debería detectarlo automáticamente
+
+3. **Reiniciar Cursor** para que cargue la configuración
+
+4. **Verificar en Settings → Tools & MCP** que "angular-test-prep" aparezca
+
+#### Recursos Disponibles para el Agente
+
+- ✅ Lista de exámenes disponibles
+- ✅ Preguntas de todos los exámenes
+- ✅ Configuraciones completas de exámenes
+- ✅ Búsqueda de preguntas por texto
+
+#### Herramientas MCP Disponibles
+
+- `list_exams` - Lista todos los exámenes
+- `get_exam {examId}` - Obtiene un examen específico
+- `search_questions {query}` - Busca preguntas por texto
+
+**Documentación completa:** Ver `angular-test-preparation/README_MCP.md`
+
+### 📚 Documentación Adicional
+
+- **`angular-test-preparation/README.md`** - Documentación completa de la aplicación
+- **`angular-test-preparation/ESTRUCTURA_EXAMENES.md`** - Estructura de exámenes
+- **`angular-test-preparation/README_MCP.md`** - Guía de integración MCP
+- **`angular-test-preparation/CONFIGURAR_MCP.md`** - Configuración paso a paso
+- **`angular-test-preparation/WSL_HOT_RELOAD.md`** - Solución para hot-reload en WSL
+
+### 🛠️ Tecnologías Utilizadas
+
+- **Angular 17** - Framework principal
+- **TypeScript** - Lenguaje de programación
+- **RxJS** - Programación reactiva
+- **Model Context Protocol (MCP)** - Integración con Cursor
+- **Node.js** - Servidor MCP
+
+### 📝 Agregar Nuevos Exámenes
+
+1. Crear archivo JSON en `src/assets/` con la estructura del examen
+2. Agregar entrada en `src/assets/exam-config.json`
+3. (Opcional) Crear componente específico si requiere funcionalidad especial
+
+Ver `angular-test-preparation/ESTRUCTURA_EXAMENES.md` para más detalles.
+
+### 🐛 Solución de Problemas
+
+#### Hot-reload no funciona en WSL
+- Ver `angular-test-preparation/WSL_HOT_RELOAD.md`
+- Configurado con polling automático
+
+#### Problemas con fnm (Node.js)
+- Ver `angular-test-preparation/SOLUCION_FNM.md`
+- Script `fnm-use` disponible
+
+#### Servidor MCP no aparece en Cursor
+- Ver `angular-test-preparation/CONFIGURAR_MCP.md`
+- Verificar que `.cursor/mcp.json` exista
+- Reiniciar Cursor completamente
+
+### 📖 Guías de Preparación Incluidas
+
+Este repositorio también incluye guías detalladas para:
+
+- **SpeechAce Jobs Exam** - `SPEECHACE_JOBS_EXAM.md`
+- **Respuestas de Ejemplo** - `SPEECHACE_RESPUESTAS_EJEMPLO.md`
+- **Prácticas de Speaking** - `SPEECHACE_PRACTICE_SPEECHES.md`
+- **Woven Evaluation** - `vanhack/REFERENCIA_RAPIDA_WOVEN.md`
+- **Guías de Estudio Woven** - `vanhack/GUIA_ESTUDIO_WOVEN_PHP.md`
+- **Examen 360** - `PREGUNTAS_EXAMEN_360.md`
+- **Assure Senior** - `assure/100_preguntas_Senior.md`
+
+### 🎯 Próximas Mejoras
+
+- [ ] Componente para exámenes de opción múltiple
+- [ ] Componente para entrevistas
+- [ ] Sistema de puntuación
+- [ ] Modo de práctica vs. modo examen
+- [ ] Exportar resultados
+- [ ] Estadísticas de práctica
 
 ## Authors
 

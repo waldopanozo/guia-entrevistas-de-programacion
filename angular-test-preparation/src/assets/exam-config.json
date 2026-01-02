@@ -1,0 +1,44 @@
+{
+  "exams": [
+    {
+      "id": "speechace",
+      "name": "SpeechAce - Examen de Inglés",
+      "description": "Práctica de speaking con tiempos específicos (4 minutos por pregunta)",
+      "type": "speaking",
+      "configFile": "questions.json",
+      "icon": "🎤"
+    },
+    {
+      "id": "examen-360",
+      "name": "Examen 360 - Senior",
+      "description": "100 preguntas de selección múltiple con múltiples respuestas correctas",
+      "type": "multiple-choice",
+      "configFile": "examen-360.json",
+      "icon": "📝"
+    },
+    {
+      "id": "assure-senior",
+      "name": "Assure - Senior Software Engineer",
+      "description": "Preguntas técnicas con respuestas y justificaciones",
+      "type": "technical-qa",
+      "configFile": "assure-senior.json",
+      "icon": "💻"
+    },
+    {
+      "id": "vanhack",
+      "name": "VanHack - Entrevistas",
+      "description": "Preguntas comunes de entrevistas con ejemplos de respuestas",
+      "type": "interview",
+      "configFile": "vanhack.json",
+      "icon": "🌎"
+    },
+    {
+      "id": "woven",
+      "name": "Woven - Evaluación Técnica",
+      "description": "3 escenarios técnicos: Debugging (35min), Autorización (45min), Deployment (20min)",
+      "type": "technical-assessment",
+      "configFile": "woven.json",
+      "icon": "🔧"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "angular-test-prep": {
+      "command": "wsl",
+      "args": [
+        "-c",
+        "cd /mnt/d/Personal/waldo.panozo/guia-entrevistas-de-programacion/angular-test-preparation && bash mcp-server/run-mcp.sh"
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "angular-test-prep": {
+      "command": "node",
+      "args": [
+        "/mnt/d/Personal/waldo.panozo/guia-entrevistas-de-programacion/angular-test-preparation/mcp-server/index.js"
+      ],
+      "cwd": "/mnt/d/Personal/waldo.panozo/guia-entrevistas-de-programacion/angular-test-preparation"
+    }
+  }
+}

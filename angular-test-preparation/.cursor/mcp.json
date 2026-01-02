@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "angular-test-prep": {
+      "command": "bash",
+      "args": [
+        "./mcp-server/run-mcp.sh"
+      ],
+      "cwd": "."
+    }
+  }
+}

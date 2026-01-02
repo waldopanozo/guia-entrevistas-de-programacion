@@ -1,0 +1,31 @@
+{
+  "examType": "vanhack",
+  "name": "VanHack - Preguntas de Entrevista",
+  "description": "Preguntas comunes de entrevistas con ejemplos de respuestas",
+  "timeConfig": null,
+  "instructions": "Practica tus respuestas a preguntas comunes de entrevistas. Lee la pregunta y prepara tu respuesta basándote en los ejemplos proporcionados.",
+  "questions": [
+    {
+      "id": 1,
+      "title": "Háblame de ti / Tell me about yourself",
+      "category": "Apertura",
+      "answer": "Soy [Nombre], actualmente trabajo como Senior Software Engineer en [Empresa]. Tengo [X] años de experiencia desarrollando aplicaciones web con React y Node.js. En mi rol actual, lideré la migración de nuestra arquitectura a microservicios, lo que resultó en una mejora del 40% en el tiempo de despliegue. Estoy buscando nuevas oportunidades internacionales que me permitan trabajar con tecnologías de vanguardia y crecer profesionalmente, por eso estoy interesado en esta posición.",
+      "tips": [
+        "Estructura: Presentación breve → Experiencia relevante → Logros destacados → Por qué estás interesado",
+        "Duración: 2-3 minutos",
+        "Evita: Información personal irrelevante, demasiados detalles sobre trabajos antiguos"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "¿Por qué quieres trabajar con nosotros? / Why do you want to work here?",
+      "category": "Apertura",
+      "answer": "He investigado sobre [Empresa] y me impresiona su enfoque en [aspecto específico]. Me atrae especialmente [proyecto/tecnología/cultura específica]. Además, veo que están expandiendo su equipo de [área], lo cual se alinea perfectamente con mi experiencia en [tu experiencia]. Creo que puedo contribuir significativamente mientras continúo creciendo profesionalmente.",
+      "tips": [
+        "Investiga: Misión y valores, proyectos recientes, stack tecnológico, cultura",
+        "Menciona aspectos específicos de la empresa",
+        "Conecta con tus objetivos profesionales"
+      ]
+    }
+  ]
+}

@@ -6,15 +6,25 @@
       <app-exam-selector (examSelected)="onExamSelected($event)"></app-exam-selector>
     </div>
     
-    <div *ngIf="selectedExam === 'speechace'">
+    <div *ngIf="selectedExam">
       <button class="btn btn-secondary" (click)="onBack()">← Volver</button>
-      <app-speech-ace></app-speech-ace>
-    </div>
-    
-    <div *ngIf="selectedExam && selectedExam !== 'speechace'">
-      <button class="btn btn-secondary" (click)="onBack()">← Volver</button>
-      <h2>Próximamente: {{ selectedExam }}</h2>
-      <p>Esta funcionalidad estará disponible pronto.</p>
+      
+      <!-- SpeechAce - Examen de speaking -->
+      <div *ngIf="selectedExam === 'speechace'">
+        <app-speech-ace></app-speech-ace>
+      </div>
+      
+      <!-- Woven - Evaluación técnica -->
+      <div *ngIf="selectedExam === 'woven'">
+        <app-woven-assessment></app-woven-assessment>
+      </div>
+      
+      <!-- Otros tipos de exámenes - Próximamente -->
+      <div *ngIf="selectedExam !== 'speechace' && selectedExam !== 'woven'">
+        <h2>Próximamente: {{ selectedExam }}</h2>
+        <p>Esta funcionalidad estará disponible pronto.</p>
+        <p>Los componentes para exámenes de opción múltiple y entrevistas están en desarrollo.</p>
+      </div>
     </div>
   </div>
 </div>
