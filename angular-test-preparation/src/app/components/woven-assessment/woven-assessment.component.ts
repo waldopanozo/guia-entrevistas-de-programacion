@@ -61,10 +61,26 @@ export class WovenAssessmentComponent implements OnInit, OnDestroy {
   // Cursor Bridge properties
   showCursorPanel = false;
   cursorInstruction = '';
+  selectedLanguage = 'javascript'; // Lenguaje por defecto
+  availableLanguages = [
+    { value: 'javascript', label: 'JavaScript' },
+    { value: 'typescript', label: 'TypeScript' },
+    { value: 'python', label: 'Python' },
+    { value: 'java', label: 'Java' },
+    { value: 'php', label: 'PHP' },
+    { value: 'cpp', label: 'C++' },
+    { value: 'csharp', label: 'C#' },
+    { value: 'go', label: 'Go' },
+    { value: 'rust', label: 'Rust' }
+  ];
   cursorResponses: ProcessResponse[] = [];
   isProcessing = false;
   connectionStatus = false;
   private cursorSubscriptions: Subscription[] = [];
+  
+  // Agrupación de código
+  private currentCodePart: { title: string; code: string; explanation: string } | null = null;
+  private codeParts: Array<{ title: string; code: string; explanation: string }> = [];
 
   constructor(
     private http: HttpClient,
@@ -241,11 +257,17 @@ export class WovenAssessmentComponent implements OnInit, OnDestroy {
 
     this.isProcessing = true;
     this.cursorResponses = [];
+    this.codeParts = [];
+    this.currentCodePart = null;
 
-    // Agregar instrucción a las respuestas
+    // Agregar mensaje corto de inicio
+    const instructionPreview = this.cursorInstruction.length > 80 
+      ? this.cursorInstruction.substring(0, 80) + '...' 
+      : this.cursorInstruction;
+    
     this.cursorResponses.push({
       type: 'processing',
-      message: `Enviando: ${this.cursorInstruction}`,
+      message: `📤 Procesando: ${instructionPreview}`,
       examId: 'woven'
     });
 
@@ -253,10 +275,11 @@ export class WovenAssessmentComponent implements OnInit, OnDestroy {
     const instruction = this.cursorInstruction;
     this.cursorInstruction = ''; // Limpiar input
 
-    // Procesar instrucción
+    // Procesar instrucción con lenguaje seleccionado
     const processSub = this.cursorBridge.processInstruction({
       examId: 'woven',
       instruction: instruction,
+      language: this.selectedLanguage, // Incluir lenguaje seleccionado
       stream: true
     }).subscribe({
       next: (response) => {
@@ -279,20 +302,92 @@ export class WovenAssessmentComponent implements OnInit, OnDestroy {
   }
 
   handleCursorMessage(message: ProcessResponse) {
-    this.cursorResponses.push(message);
+    // Filtrar y procesar mensajes según tipo
+    
+    // 1. Ocultar exam_data completo (solo mostrar resumen)
+    if (message.type === 'exam_data' && message.data) {
+      return; // No mostrar nada, la información ya está disponible
+    }
 
-    // Scroll al final de las respuestas
+    // 2. Simplificar mensajes de procesamiento
+    if (message.type === 'processing') {
+      if (message.message && message.message.length > 150) {
+        // Acortar mensajes muy largos
+        const shortMessage: ProcessResponse = {
+          ...message,
+          message: message.message.substring(0, 80) + '...'
+        };
+        this.cursorResponses.push(shortMessage);
+      } else if (message.message && !message.message.includes('Enviando:')) {
+        // Solo mostrar si no es el mensaje de "Enviando:" completo
+        this.cursorResponses.push(message);
+      }
+      return;
+    }
+
+    // 3. Filtrar chunks de stream - solo mostrar código y explicaciones importantes
+    if (message.type === 'stream_chunk' && message.chunk) {
+      const chunk = message.chunk.trim();
+      
+      // Ocultar mensajes de progreso genéricos
+      if (chunk.includes('Analizando tu solicitud') ||
+          chunk.includes('Cargando información del examen') ||
+          chunk.includes('Procesando tu instrucción') ||
+          chunk.includes('Generando respuesta') ||
+          (chunk.includes('Generando código en') && !chunk.includes('Parte'))) {
+        return; // No mostrar estos mensajes
+      }
+      
+      // Mostrar encabezados de partes
+      if (chunk.includes('==================================================') && chunk.includes('Parte')) {
+        const titleMatch = chunk.match(/Parte \d+\/\d+: (.+)/);
+        if (titleMatch) {
+          const title = titleMatch[1].trim();
+          this.cursorResponses.push({
+            ...message,
+            chunk: `\n📦 ${title}\n${'='.repeat(60)}\n`
+          });
+        }
+        return;
+      }
+      
+      // Mostrar explicaciones
+      if (chunk.includes('💡')) {
+        this.cursorResponses.push({
+          ...message,
+          chunk: chunk
+        });
+        return;
+      }
+      
+      // Mostrar código (todo lo demás)
+      if (chunk.length > 0 && !chunk.includes('Generando')) {
+        this.cursorResponses.push(message);
+      }
+      return;
+    }
+
+    // 4. Mostrar otros tipos de mensajes normalmente
+    if (message.type === 'stream_result' || 
+        message.type === 'result' || 
+        message.type === 'complete' || 
+        message.type === 'error' ||
+        message.type === 'connected') {
+      this.cursorResponses.push(message);
+    }
+
+    // Marcar como completado
+    if (message.type === 'complete' || message.type === 'error') {
+      this.isProcessing = false;
+    }
+
+    // Scroll al final
     setTimeout(() => {
       const responsesContainer = document.getElementById('cursor-responses');
       if (responsesContainer) {
         responsesContainer.scrollTop = responsesContainer.scrollHeight;
       }
     }, 100);
-
-    // Marcar como completado si es necesario
-    if (message.type === 'complete' || message.type === 'error') {
-      this.isProcessing = false;
-    }
   }
 
   getResponseClass(response: ProcessResponse): string {
@@ -350,7 +445,63 @@ export class WovenAssessmentComponent implements OnInit, OnDestroy {
     this.sendCursorInstruction();
   }
 
+  generateCodeForScenario() {
+    if (!this.selectedScenario) return;
+
+    const scenario = this.selectedScenario;
+    
+    // Construir instrucción completa con toda la información del escenario
+    let instruction = `Genera el código de ejemplo para este ejercicio:\n\n`;
+    instruction += `**Título:** ${scenario.title}\n`;
+    instruction += `**Tipo:** ${scenario.type}\n`;
+    instruction += `**Tiempo límite:** ${scenario.timeLimit} minutos\n\n`;
+    instruction += `**Descripción:**\n${scenario.description}\n\n`;
+    
+    if (scenario.objectives && scenario.objectives.length > 0) {
+      instruction += `**Objetivos:**\n`;
+      scenario.objectives.forEach((obj, i) => {
+        instruction += `${i + 1}. ${obj}\n`;
+      });
+      instruction += `\n`;
+    }
+    
+    if (scenario.strategy && scenario.strategy.length > 0) {
+      instruction += `**Estrategia:**\n`;
+      scenario.strategy.forEach((phase, i) => {
+        instruction += `Fase ${i + 1}: ${phase.phase} (${phase.duration} min)\n`;
+        if (phase.tasks && phase.tasks.length > 0) {
+          phase.tasks.forEach(task => {
+            instruction += `  - ${task}\n`;
+          });
+        }
+      });
+      instruction += `\n`;
+    }
+    
+    if (scenario.keyPoints && scenario.keyPoints.length > 0) {
+      instruction += `**Puntos clave:**\n`;
+      scenario.keyPoints.forEach(point => {
+        instruction += `- ${point}\n`;
+      });
+      instruction += `\n`;
+    }
+    
+    instruction += `\nPor favor, genera el código de ejemplo paso a paso e incrementalmente para resolver este ejercicio.`;
+    
+    this.cursorInstruction = instruction;
+    this.sendCursorInstruction();
+  }
+
   reconnectCursor() {
     this.cursorBridge.reconnect();
+  }
+
+  hasUsefulDetails(details: any): boolean {
+    if (!details) return false;
+    return !!(details.totalScenarios || 
+              (details.scenarios && details.scenarios.length > 0) ||
+              (details.concepts && details.concepts.concepts && details.concepts.concepts.length > 0) ||
+              (details.objectives && details.objectives.length > 0) ||
+              (details.phases && details.phases.length > 0));
   }
 }

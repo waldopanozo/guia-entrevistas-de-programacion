@@ -6,6 +6,7 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 export interface ProcessRequest {
   examId?: string;
   instruction: string;
+  language?: string; // Lenguaje de programación seleccionado
   stream?: boolean;
 }
 
@@ -160,6 +161,7 @@ export class CursorBridgeService {
       type: 'process',
       examId: request.examId,
       instruction: request.instruction,
+      language: request.language || 'javascript', // Incluir lenguaje, default JavaScript
       stream: request.stream !== false // Por defecto true
     };
 

@@ -163,6 +163,9 @@
 
       <!-- Botones rápidos -->
       <div class="cursor-quick-actions">
+        <button class="btn btn-sm btn-primary" (click)="generateCodeForScenario()">
+          💻 Generar Código para este Escenario
+        </button>
         <button class="btn btn-sm btn-outline-primary" (click)="askAboutScenario(selectedScenario.id)">
           💡 Estrategia del Escenario
         </button>
@@ -173,18 +176,34 @@
 
       <!-- Input de instrucción -->
       <div class="cursor-input-container">
+        <!-- Selector de lenguaje -->
+        <div class="language-selector">
+          <label for="language-select">🌐 Lenguaje de Programación:</label>
+          <select
+            id="language-select"
+            [(ngModel)]="selectedLanguage"
+            class="language-select"
+            [disabled]="isProcessing"
+          >
+            <option *ngFor="let lang of availableLanguages" [value]="lang.value">
+              {{ lang.label }}
+            </option>
+          </select>
+        </div>
+        
+        <!-- Área de texto para instrucción completa -->
         <textarea 
           [(ngModel)]="cursorInstruction"
           class="cursor-input"
-          placeholder="Escribe tu pregunta o instrucción aquí... (ej: 'Explícame la estrategia paso a paso')"
-          rows="3"
+          placeholder="Pega aquí el ejercicio completo (ej: problema de LeetCode, descripción del ejercicio, etc.)..."
+          rows="8"
           [disabled]="isProcessing || !connectionStatus">
         </textarea>
         <button 
           class="btn btn-primary"
           (click)="sendCursorInstruction()"
           [disabled]="!cursorInstruction.trim() || isProcessing || !connectionStatus">
-          {{ isProcessing ? '⏳ Procesando...' : '📤 Enviar' }}
+          {{ isProcessing ? '⏳ Procesando...' : '📤 Generar Código por Versiones' }}
         </button>
       </div>
 
@@ -206,21 +225,69 @@
           </div>
           
           <div class="response-content">
-            <p *ngIf="response.message">{{ response.message }}</p>
-            <p *ngIf="response.chunk" class="stream-chunk">{{ response.chunk }}</p>
+            <!-- Mensajes simples -->
+            <p *ngIf="response.message && response.type !== 'stream_chunk'" class="response-message">{{ response.message }}</p>
+            
+            <!-- Chunks de código - visualización mejorada -->
+            <div *ngIf="response.chunk" class="stream-chunk-container">
+              <!-- Encabezado de parte -->
+              <div *ngIf="response.chunk.includes('📦')" class="code-part-header">
+                <pre class="part-header-text">{{ response.chunk }}</pre>
+              </div>
+              <!-- Código (solo si no es encabezado ni explicación) -->
+              <pre *ngIf="!response.chunk.includes('📦') && 
+                          !response.chunk.includes('💡') && 
+                          !response.chunk.includes('=')" 
+                   class="code-block">{{ response.chunk }}</pre>
+              <!-- Explicaciones -->
+              <div *ngIf="response.chunk.includes('💡')" class="code-explanation">
+                {{ response.chunk }}
+              </div>
+            </div>
             
             <div *ngIf="response.result" class="result-content">
-              <div *ngIf="response.result.suggestions && response.result.suggestions.length > 0">
-                <h5>Sugerencias:</h5>
+              <!-- Respuesta principal -->
+              <div *ngIf="response.result.answer" class="answer-text">
+                <pre class="formatted-text">{{ response.result.answer }}</pre>
+              </div>
+              
+              <!-- Sugerencias -->
+              <div *ngIf="response.result.suggestions && response.result.suggestions.length > 0" class="suggestions">
+                <h5>💡 Sugerencias:</h5>
                 <ul>
                   <li *ngFor="let suggestion of response.result.suggestions">{{ suggestion }}</li>
                 </ul>
               </div>
-              <pre *ngIf="response.result.examInfo">{{ response.result.examInfo | json }}</pre>
+              
+              <!-- Detalles (solo si hay información útil) -->
+              <div *ngIf="response.result.details && hasUsefulDetails(response.result.details)" class="details">
+                <h5>📋 Detalles:</h5>
+                <div *ngIf="response.result.details.totalScenarios" class="detail-item">
+                  <strong>Total de escenarios:</strong> {{ response.result.details.totalScenarios }}
+                </div>
+                <div *ngIf="response.result.details.scenarios" class="detail-item">
+                  <strong>Escenarios:</strong>
+                  <ul>
+                    <li *ngFor="let s of response.result.details.scenarios">
+                      Escenario {{ s.id }}: {{ s.title }} ({{ s.timeLimit }} min, {{ s.phases }} fases)
+                    </li>
+                  </ul>
+                </div>
+                <div *ngIf="response.result.details.concepts && response.result.details.concepts.concepts" class="detail-item">
+                  <strong>Conceptos:</strong>
+                  <ul>
+                    <li *ngFor="let concept of response.result.details.concepts.concepts">{{ concept }}</li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
-            <div *ngIf="response.data" class="exam-data">
-              <pre>{{ response.data | json }}</pre>
+            <!-- Ocultar JSON completo de exam_data, solo mostrar resumen -->
+            <div *ngIf="response.data && response.type !== 'exam_data'" class="exam-data-collapsed">
+              <details>
+                <summary>📋 Ver datos del examen (JSON)</summary>
+                <pre class="json-data">{{ response.data | json }}</pre>
+              </details>
             </div>
 
             <div *ngIf="response.error" class="error-message">
