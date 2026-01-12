@@ -1,5 +1,19 @@
 # Rules for Woven Evaluation - Backend PHP
 
+## ⚠️ CRITICAL: ASSESSMENT MODE RULES
+
+**When user is doing an ASSESSMENT (evaluación/test):**
+
+1. **❌ DO NOT create files** - Never use write_file, search_replace, or any file creation tools
+2. **❌ DO NOT update files** - Never modify existing files
+3. **❌ DO NOT save anything** - Only display code/responses in chat
+4. **✅ Display everything in chat** - Show code, solutions, explanations directly in the conversation
+5. **✅ Fast responses** - Give answers as quickly as possible, prioritize speed
+6. **✅ Solutions by levels** - Show STEP 1 (basic), STEP 2 (improved), STEP 3 (final) - progressive solution
+7. **⏸️ Wait for "finalizar"** - Only when user says "finalizar" or "guardar" or "save", then you can save/update files
+
+**These rules apply ONLY during active assessment. User will explicitly say when assessment starts/ends.**
+
 ## CRITICAL: MANDATORY CODE EVOLUTION DISPLAY
 
 **EVERY TIME code is generated, you MUST show the evolution step by step:**
