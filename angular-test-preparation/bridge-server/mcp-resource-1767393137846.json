@@ -1,0 +1,35 @@
+{
+  "examType": "assure-senior",
+  "name": "Assure - Senior Software Engineer",
+  "description": "Preguntas técnicas con respuestas y justificaciones",
+  "timeConfig": null,
+  "instructions": "Preguntas técnicas de nivel Senior con múltiples opciones. Selecciona todas las respuestas correctas.",
+  "questions": [
+    {
+      "id": 1,
+      "category": "CI/CD",
+      "question": "¿Cómo configurarías un servidor de CI desde cero? (Selecciona todas las que apliquen)",
+      "options": [
+        { "id": "A", "text": "Elegir herramienta (Jenkins, GitLab CI, GitHub Actions) y configurar servidor/build agent" },
+        { "id": "B", "text": "Conectar con repositorio de código y crear pipeline básico (checkout, build, tests, deploy)" },
+        { "id": "C", "text": "Configurar notificaciones, integrar herramientas de calidad de código y configurar secrets" },
+        { "id": "D", "text": "Todas las anteriores" }
+      ],
+      "correctAnswers": ["D"],
+      "explanation": "Configurar un servidor de CI desde cero requiere todos estos pasos: elegir la herramienta apropiada según necesidades, configurar el servidor o build agent, conectar con el repositorio de código, crear un pipeline básico con las etapas esenciales (checkout, instalar dependencias, build, tests, deploy), configurar notificaciones para el equipo, integrar herramientas de calidad de código (linters, code coverage), configurar secrets y variables de entorno de forma segura, y documentar el proceso para el equipo."
+    },
+    {
+      "id": 2,
+      "category": "CI/CD",
+      "question": "¿Cómo integrarías Docker en un pipeline de CI? (Selecciona todas las que apliquen)",
+      "options": [
+        { "id": "A", "text": "Usar imágenes Docker para builds consistentes y multi-stage builds para optimizar" },
+        { "id": "B", "text": "Cache de layers de Docker y ejecutar tests en contenedores" },
+        { "id": "C", "text": "Build y push de imágenes a registry, usar Docker Compose para servicios dependientes" },
+        { "id": "D", "text": "Todas las anteriores" }
+      ],
+      "correctAnswers": ["D"],
+      "explanation": "Integrar Docker en CI/CD ofrece múltiples beneficios: usar imágenes Docker garantiza builds consistentes independientemente del ambiente, los multi-stage builds optimizan el tamaño de imágenes finales, el cache de layers acelera builds subsecuentes, ejecutar tests en contenedores asegura ambiente aislado y reproducible, build y push de imágenes permite distribución y reutilización, y Docker Compose facilita orquestación de servicios dependientes."
+    }
+  ]
+}
