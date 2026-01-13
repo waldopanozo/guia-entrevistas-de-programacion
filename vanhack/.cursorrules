@@ -10,19 +10,559 @@
 4. **✅ Display everything in chat** - Show code, solutions, explanations directly in the conversation
 5. **✅ Fast responses** - Give answers as quickly as possible, prioritize speed
 6. **✅ Solutions by levels** - Show STEP 1 (basic), STEP 2 (improved), STEP 3 (final) - progressive solution
-7. **⏸️ Wait for "finalizar"** - Only when user says "finalizar" or "guardar" or "save", then you can save/update files
+7. **⏸️ Wait for "finalizar"** - Only when user says "finalizar" or "guardar" or "save", then save everything
 
 **These rules apply ONLY during active assessment. User will explicitly say when assessment starts/ends.**
 
+## 📁 SAVE ON "FINALIZAR" - MANDATORY
+
+**When user says "finalizar", "guardar", or "save", you MUST:**
+
+1. **Create folder structure:**
+   - Path: `resoluciones-examenes/` (in workspace root)
+   - Create folder if it doesn't exist
+
+2. **Create file with format:**
+   - Filename: `YYYY-MM-DD_[assessment-name].md`
+   - Example: `2025-01-15_woven-median-sorted-arrays.md`
+   - Example: `2025-01-15_woven-minimum-time-visiting-points.md`
+
+3. **File content MUST include:**
+   - **Date and time** of the assessment
+   - **Assessment name/title** (e.g., "Woven - Median of Two Sorted Arrays")
+   - **Problem description** (full problem statement)
+   - **Research phase** (if any):
+     - Research topics suggested
+     - Resources consulted
+     - Key learnings
+   - **STEP 1: Basic Solution**
+     - Explanation
+     - Complete code (WITH debug/logging statements)
+     - Debug/logging output examples
+     - All test cases
+     - Test results (if available)
+   - **STEP 2: Improvements**
+     - Explanation of changes
+     - Complete code
+     - Additional test cases
+     - Test results (if available)
+   - **STEP 3: Final Solution**
+     - Final explanation
+     - Complete code
+     - Complete test suite
+     - Test results (if available)
+   - **Validation/Results:**
+     - Which tests passed
+     - Which tests failed (if any)
+     - Error messages (if any)
+     - Final status
+   - **Notes/Learnings:**
+     - Key insights
+     - Challenges faced
+     - Solutions found
+     - Time taken (if mentioned)
+   - **Complete conversation context** - All Q&A during the exercise
+
+4. **File format:**
+   - Markdown format (.md)
+   - Well-structured with headers
+   - Code blocks properly formatted
+   - Easy to read and review later
+
+**Example file structure:**
+```markdown
+# Assessment: [Name]
+**Date:** 2025-01-15
+**Time:** 14:30
+**Platform:** Woven / LeetCode / etc.
+
+## Problem Description
+[Full problem statement]
+
+## Research Phase
+[Research topics and findings]
+
+## Solutions
+
+### STEP 1: Basic Solution
+[Explanation, code, tests, results]
+
+### STEP 2: Improvements
+[Explanation, code, tests, results]
+
+### STEP 3: Final Solution
+[Explanation, code, tests, results]
+
+## Validation
+[Test results, errors, final status]
+
+## Notes
+[Key learnings, challenges, insights]
+```
+
+**IMPORTANT:** Save ALL information from the exercise, including failed attempts, error messages, and the complete thought process.
+
+## 🧠 NATURAL HUMAN DEVELOPMENT PROCESS - MANDATORY
+
+**IMPORTANT: Solutions must simulate REAL human development process, not just show final code!**
+
+**The development process MUST follow this natural human workflow:**
+
+### Phase 0: Understanding the Problem (Human Thinking)
+
+**Before any code, show human thought process:**
+
+1. **Read and analyze** - "Let me understand what this problem is asking..."
+2. **Break down the problem** - "So I need to..."
+3. **Think about examples** - "Let me trace through the examples manually..."
+4. **Identify key concepts** - "This seems like a [pattern/algorithm] problem..."
+5. **Consider edge cases** - "What about empty inputs? Single element? etc."
+
+**Show this thinking process in natural language before coding.**
+
+### Phase 1: Manual Testing & Exploration (Human Approach)
+
+**Before writing code, humans test manually:**
+
+1. **Trace examples by hand:**
+   - "Let me trace Example 1 step by step..."
+   - Show manual calculation
+   - Show intermediate values
+   - Verify the expected output
+
+2. **Test with simple inputs:**
+   - "Let me try with a simple case first..."
+   - Test with minimal data
+   - See what happens
+   - Understand the pattern
+
+3. **Identify what we need to track:**
+   - "I need to keep track of..."
+   - Variables needed
+   - Data structures needed
+   - State management
+
+**Show this exploration process before STEP 1 code.**
+
+### Phase 2: Incremental Development (Real Human Process)
+
+**STEP 1 should show REAL incremental development:**
+
+1. **Start with simplest possible code:**
+   - "Let me start with the most basic version..."
+   - Just handle the happy path
+   - Maybe even incomplete
+   - Test it immediately
+
+2. **Add debug/logging to see what's happening:**
+   - "Let me add some logging to see what's going on..."
+   - Print inputs
+   - Print intermediate values
+   - Print outputs
+   - Verify each step
+
+3. **Test with provided examples:**
+   - "Let me test with Example 1..."
+   - Run through manually with code
+   - Check if output matches
+   - If not, debug why
+
+4. **Fix issues as they appear:**
+   - "Hmm, that didn't work. Let me check..."
+   - Show the error or wrong output
+   - Think about why
+   - Fix it
+   - Test again
+
+5. **Add edge cases one by one:**
+   - "Now let me handle empty array..."
+   - Test it
+   - "Now let me handle single element..."
+   - Test it
+   - Build up incrementally
+
+### Phase 3: Refinement Based on Senior Experience
+
+**STEP 2 and STEP 3 show senior-level refinement:**
+
+1. **Review what we have:**
+   - "Looking at my solution, I notice..."
+   - Identify inefficiencies
+   - Identify missing cases
+   - Think about production scenarios
+
+2. **Apply senior knowledge:**
+   - "Based on my experience with [similar problem]..."
+   - "I know from PostgreSQL optimization that..."
+   - "In microservices, we usually..."
+   - Apply real-world patterns
+
+3. **Optimize and improve:**
+   - "I can optimize this by..."
+   - Consider time/space complexity
+   - Apply design patterns if relevant
+   - Make it production-ready
+
+### Format for Natural Development:
+
+```
+## Understanding the Problem
+
+Let me break down what this problem is asking:
+- [Analysis in natural language]
+- [Key requirements]
+- [Edge cases to consider]
+
+## Manual Testing
+
+Let me trace through Example 1 manually:
+- Input: [example]
+- Step 1: [manual calculation]
+- Step 2: [manual calculation]
+- Expected output: [result]
+- This tells me I need to [insight]
+
+## STEP 1: Basic Solution (Incremental Development)
+
+**My thinking:** I'll start with the simplest approach...
+
+**First attempt - just the happy path:**
+[code with lots of debug]
+
+**Testing with Example 1:**
+[show debug output]
+[show what we learned]
+
+**Found an issue - let me fix it:**
+[show the problem]
+[show the fix]
+[test again]
+
+**Now let me add edge case handling:**
+[incremental addition]
+[test it]
+
+[Final STEP 1 code with all debug]
+```
+
+**This simulates REAL human development:**
+- ✅ Not perfect from the start
+- ✅ Test and fix incrementally
+- ✅ Learn from each test
+- ✅ Build up the solution
+- ✅ Show the thinking process
+- ✅ Make mistakes and fix them
+- ✅ Apply experience gradually
+
+## 🔍 RESEARCH PROCESS - MANDATORY FOR ASSESSMENTS
+
+**IMPORTANT: Research is ENCOURAGED and VALUED in Woven assessments!**
+
+**When solving an assessment problem, you MUST follow this research process:**
+
+### Step 0: Research Phase (BEFORE coding)
+
+**Before providing STEP 1 solution, you should:**
+
+1. **Analyze the problem** - Understand requirements, constraints, examples
+2. **Identify research needs** - What concepts/algorithms/patterns are needed?
+3. **Suggest research topics** - What should the user look up?
+4. **Provide research guidance** - Where to search and what to look for
+
+**Research is allowed and encouraged:**
+- ✅ StackOverflow - For specific implementation questions
+- ✅ Blog posts - For explanations and tutorials
+- ✅ Official documentation - PHP manual, framework docs, etc.
+- ✅ Algorithm explanations - For understanding approaches
+- ✅ Code examples - For reference (must cite sources)
+
+**Research topics to consider:**
+- Algorithm patterns (two pointers, binary search, etc.)
+- Data structures needed
+- PHP-specific functions or methods
+- Edge cases and common pitfalls
+- Performance optimizations
+- Best practices for the problem type
+
+### Research Workflow:
+
+```
+1. User provides problem
+2. AI analyzes and suggests research topics
+3. User researches (StackOverflow, docs, blogs)
+4. AI provides STEP 1 solution based on research
+5. Continue with STEP 2, STEP 3 as normal
+```
+
+**Example Research Suggestions:**
+
+For "Median of Two Sorted Arrays":
+- "Binary search on two sorted arrays"
+- "Finding median in O(log n) time"
+- "Partition algorithm for sorted arrays"
+- "LeetCode median of sorted arrays approach"
+
+For "Minimum Time Visiting All Points":
+- "Chebyshev distance calculation"
+- "Diagonal movement optimization"
+- "Manhattan vs Chebyshev distance"
+
+**After research, provide solution with:**
+- Comments citing concepts learned from research
+- References to algorithms/patterns used
+- Clear explanation of approach
+- **If using code from sources, MUST cite them** (required by Woven Code of Conduct)
+
+**Citing Sources (REQUIRED if using others' code):**
+- If you use code snippets from StackOverflow, blogs, or documentation
+- Add a comment with source URL: `// Source: https://stackoverflow.com/...`
+- Or: `// Based on approach from: [URL or source name]`
+- This is MANDATORY per Woven Code of Conduct
+
+**This process shows:**
+- ✅ Research skills (valued by Woven)
+- ✅ Ability to learn and apply new concepts
+- ✅ Professional development approach
+- ✅ Understanding of when to look things up
+- ✅ Ethical coding practices (citing sources)
+
 ## CRITICAL: MANDATORY CODE EVOLUTION DISPLAY
 
-**EVERY TIME code is generated, you MUST show the evolution step by step:**
+**EVERY TIME code is generated, you MUST show the evolution step by step following NATURAL HUMAN DEVELOPMENT:**
 
-1. **STEP 1: Initial simple version** - Basic solution, not perfect
+### Pre-Code Phase: Human Thinking Process
+
+**BEFORE writing any code, show:**
+
+1. **Problem Understanding (Natural Language):**
+   - "Let me understand what this problem is asking..."
+   - Break down requirements
+   - Identify key constraints
+   - Think about what we need to achieve
+
+2. **Manual Example Tracing:**
+   - "Let me trace through Example 1 manually..."
+   - Show step-by-step manual calculation
+   - Show intermediate values
+   - Verify expected output
+   - "This tells me I need to track..."
+
+3. **Simple Case Testing:**
+   - "Let me try with a simple case first..."
+   - Test with minimal input
+   - See what pattern emerges
+   - "I notice that..."
+
+4. **Variable Identification:**
+   - "I'll need to keep track of..."
+   - List variables needed
+   - Data structures needed
+   - State management
+
+### STEP 1: Incremental Development (Real Human Process)
+
+**Show REAL incremental development, not perfect code:**
+
+1. **Start with absolute simplest version:**
+   - "Let me start with the most basic version - just handle the happy path..."
+   - Maybe even incomplete or wrong initially
+   - Show this first attempt
+
+2. **Add debug/logging immediately:**
+   - "Let me add logging to see what's happening..."
+   - Print all inputs
+   - Print intermediate values at each step
+   - Print outputs
+   - Show variable states
+
+3. **Test with first example:**
+   - "Let me test with Example 1..."
+   - Show the debug output
+   - Show what we expected vs what we got
+   - "Hmm, I see that..."
+
+4. **Fix issues as they appear:**
+   - "That didn't work as expected. Let me check..."
+   - Show the problem (wrong output, error, etc.)
+   - Think about why: "I think the issue is..."
+   - Fix it: "Let me adjust..."
+   - Test again: "Now let me test again..."
+   - Show new debug output
+
+5. **Add features incrementally:**
+   - "Now let me handle the case where..."
+   - Add one feature at a time
+   - Test it immediately
+   - "Good, that works. Now let me add..."
+   - Continue building up
+
+6. **Test edge cases one by one:**
+   - "Let me test with empty array..."
+   - See what happens
+   - Fix if needed
+   - "Now let me test with single element..."
+   - Continue incrementally
+
+**STEP 1 Requirements:**
+   - **MUST show the thinking process** before code
+   - **MUST show manual example tracing**
+   - **MUST start with simplest version** (maybe even wrong)
+   - **MUST include DEBUG/LOGGING** throughout
+   - **MUST show incremental fixes** (not perfect from start)
+   - **MUST test after each change**
+   - **MUST show debug output** for each test
+   - **MUST include MULTIPLE test cases (3-5 minimum)**
+   - **MUST include a BRIEF EXPLANATION** of what we learned from testing
+   
 2. **STEP 2: Improvements** - Add edge cases, validations, optimizations
+   - **MUST include a BRIEF EXPLANATION** of what changed and why
+   - "Looking at my solution, I notice..."
+   - "Based on my experience with [similar problem]..."
+   - Show senior-level thinking
+   - Include additional tests for newly discovered edge cases
+   - May include debug/logging for new edge cases being tested
+   
 3. **STEP 3: Final version** - With comments explaining the evolution
+   - **MUST include a BRIEF EXPLANATION** summarizing the complete solution
+   - "Based on my senior experience, I can optimize this by..."
+   - Apply real-world patterns from your profile
+   - Include complete test suite covering all scenarios
+   - Debug/logging can be removed or commented out (show both versions)
+   - Show production-ready considerations
 
 **This is MANDATORY for ALL code generation requests. Never show only the final version.**
+
+## MANDATORY: EXPLANATION FOR EACH STEP
+
+**EVERY solution step MUST include a brief explanation:**
+
+### Format for Explanations:
+
+**STEP 1 Explanation should include:**
+- What the solution does (high-level approach)
+- Key algorithm/pattern used
+- Why this approach was chosen
+- Time/space complexity (if relevant)
+- Brief: 2-4 sentences maximum
+
+**STEP 2 Explanation should include:**
+- What changed from STEP 1
+- Why the changes were needed
+- Edge cases addressed
+- Brief: 2-3 sentences maximum
+
+**STEP 3 Explanation should include:**
+- Summary of the complete solution
+- Final approach and optimizations
+- Key insights or learnings
+- Brief: 3-5 sentences maximum
+
+## MANDATORY: DEBUG/LOGGING IN STEP 1
+
+**STEP 1 MUST include debug/logging statements to show step-by-step testing:**
+
+### Debug/Logging Requirements:
+
+1. **Show variable values** at key points
+2. **Log intermediate steps** in the algorithm
+3. **Display decision points** (if/else conditions)
+4. **Track loop iterations** (for complex loops)
+5. **Show function inputs/outputs** for debugging
+6. **Show manual testing process** - trace through examples
+7. **Show incremental fixes** - when something doesn't work, show the fix
+8. **Show learning from tests** - what we discovered from each test
+
+### Natural Development Flow in STEP 1:
+
+**Before code:**
+- Manual trace of examples
+- Identify what variables we need
+- Think about the approach
+
+**In code:**
+- Start with simplest version
+- Add debug immediately
+- Test with first example
+- See what happens
+- Fix if needed
+- Test again
+- Add next feature incrementally
+- Test again
+- Continue building up
+
+**This shows REAL human development, not just final code.**
+
+### Debug/Logging Format:
+
+**Use appropriate logging for the language:**
+- PHP: `error_log()`, `var_dump()`, or `print_r()`
+- Include comments explaining what we're debugging
+- Show expected vs actual values when testing
+
+### Example with Debug/Logging:
+
+```php
+## STEP 1: Basic Solution
+
+**Explanation:**
+This solution uses a two-pointer approach to merge the arrays, then finds the median.
+We iterate through both arrays simultaneously, comparing elements and building a merged array.
+Time complexity: O(m+n), Space: O(m+n). This is straightforward but not optimal.
+
+**Debug/Logging included to show step-by-step testing process.**
+
+```php
+function findMedianSortedArrays($nums1, $nums2) {
+    $merged = [];
+    $i = 0;
+    $j = 0;
+    
+    // Debug: Show initial state
+    error_log("Starting merge: nums1=" . json_encode($nums1) . ", nums2=" . json_encode($nums2));
+    
+    while ($i < count($nums1) && $j < count($nums2)) {
+        // Debug: Show comparison step
+        error_log("Comparing: nums1[$i]={$nums1[$i]} vs nums2[$j]={$nums2[$j]}");
+        
+        if ($nums1[$i] <= $nums2[$j]) {
+            $merged[] = $nums1[$i];
+            error_log("Added nums1[$i]={$nums1[$i]}, merged=" . json_encode($merged));
+            $i++;
+        } else {
+            $merged[] = $nums2[$j];
+            error_log("Added nums2[$j]={$nums2[$j]}, merged=" . json_encode($merged));
+            $j++;
+        }
+    }
+    
+    // ... rest of code with debug statements
+    
+    // Debug: Show final merged array
+    error_log("Final merged array: " . json_encode($merged));
+    
+    // Calculate median
+    $n = count($merged);
+    $median = ($n % 2 === 0) 
+        ? ($merged[$n/2 - 1] + $merged[$n/2]) / 2.0
+        : (float)$merged[$n/2];
+    
+    error_log("Median calculated: $median");
+    return $median;
+}
+```
+
+**In STEP 3, show both versions:**
+- Version with debug (commented out)
+- Clean version without debug
+- Explain that debug was used during development
+
+**This helps the user:**
+- ✅ Understand what each step does
+- ✅ Learn the approach and reasoning
+- ✅ Know why certain decisions were made
+- ✅ Follow the thought process
+- ✅ See the debugging/testing process (senior-level practice)
+- ✅ Understand how to test incrementally
 
 ## CRITICAL: DISPLAY FORMAT - NO FILES
 
@@ -65,34 +605,70 @@
 
 **FOR EACH STEP (STEP 1, STEP 2, STEP 3), you MUST also generate corresponding tests:**
 
-- **STEP 1 tests:** Basic test cases for the initial simple version
-- **STEP 2 tests:** Additional tests for edge cases and improvements
-- **STEP 3 tests:** Complete test suite covering all scenarios including edge cases
+- **STEP 1 tests:** **MULTIPLE test cases** (at least 3-5) for the initial simple version to validate it works correctly from the start
+  - Include: Example cases from problem description
+  - Include: Basic happy path scenarios
+  - Include: Simple edge cases (empty array, single element, etc.)
+  - Goal: Solution should pass these tests immediately
+  
+- **STEP 2 tests:** Additional tests for edge cases discovered during improvements
+  - Include: More complex edge cases
+  - Include: Boundary conditions
+  - Include: Cases that revealed bugs in STEP 1
+  
+- **STEP 3 tests:** Complete test suite covering ALL scenarios
+  - Include: All examples from problem
+  - Include: All edge cases
+  - Include: Boundary conditions
+  - Include: Error cases
+  - Include: Performance edge cases
 
 **This is CRITICAL because:**
 - The provided tests may not cover all edge cases
 - You need to manually add tests to the test editor
 - Missing edge cases will cause the solution to fail
+- **STEP 1 must have MULTIPLE test cases** to validate the basic solution works
 - Each step should have tests that validate that specific step's functionality
 - In Project Code Challenges, you can edit test files to add your own tests
+- **User wants to pass tests from the first solution (STEP 1), so provide comprehensive tests from the start**
 
 **Example: If the function should return "Hello, [name]!" OR "Hello there!" based on input:**
-- STEP 1 test: Basic case with valid name
-- STEP 2 test: Edge case with empty name (should return "Hello there!")
-- STEP 3 test: All edge cases (null, empty string, whitespace, etc.)
+- **STEP 1 tests (MULTIPLE):**
+  - Basic case with valid name: "Hello, Qualified!"
+  - Different name: "Hello, John!"
+  - Single character name: "Hello, A!"
+  - Name with special characters: "Hello, José!"
+  
+- **STEP 2 tests (Additional):**
+  - Edge case with empty name: "Hello there!"
+  - Whitespace name: "Hello there!"
+  
+- **STEP 3 tests (Complete):**
+  - All above tests PLUS:
+  - Null handling
+  - All whitespace variations
+  - Very long names
+  - Special characters edge cases
 
 ## Qualified Platform Workflow
 
 ### Recommended Workflow for Project Code Challenges:
 
 1. **Read instructions completely** - Understand the challenge requirements
-2. **Review starting code** - Explore file structure, understand existing code
-3. **Review example tests** - See what's being tested
-4. **Work on solution** - Implement your code following STEP 1, STEP 2, STEP 3
-5. **Click RUN TESTS** - Test your code frequently (you see results)
-6. **Add your own tests** - Edit test files to add edge cases
-7. **Iterate** - Fix issues, add edge cases, improve solution
-8. **SUBMIT SOLUTION** - Only when ready (you won't see results, only one chance)
+2. **🔍 RESEARCH PHASE** - Look up concepts, algorithms, patterns needed
+   - StackOverflow for implementation questions
+   - Documentation for language/framework specifics
+   - Blog posts for explanations
+   - Algorithm resources for approaches
+3. **Review starting code** - Explore file structure, understand existing code
+4. **Review example tests** - See what's being tested
+5. **Work on solution** - Implement your code following STEP 1, STEP 2, STEP 3
+   - Include comments referencing research findings
+   - Cite sources if using specific approaches
+6. **Click RUN TESTS** - Test your code frequently (you see results)
+7. **Add your own tests** - Edit test files to add edge cases
+8. **Iterate** - Fix issues, add edge cases, improve solution
+9. **SUBMIT SOLUTION** - Only when ready (you won't see results, only one chance)
 
 ### Important Notes:
 
@@ -104,12 +680,116 @@
 
 ## User Context
 - **Level:** Senior Software Engineer
-- **Primary Language:** PHP (Backend)
-- **Experience:** Experienced Backend Engineer
+- **Primary Language:** PHP (Backend) - For Woven assessment
+- **Full Stack Experience:** 
+  - **Backend:** Java (Spring Framework, Spring Boot), PHP, Node.js
+  - **Frontend:** React, Angular, jQuery
+  - **Database:** PostgreSQL, SQL optimization, query performance
+  - **APIs:** RESTful APIs, GraphQL
+  - **DevOps:** Docker, CI/CD (Jenkins, GitLab CI), microservices architecture
+  - **Methodologies:** Scrum, Kanban
+  - **Principles:** SOLID, Design Patterns
+- **Academic:** PhD in Business (in progress)
+- **Research:** Co-author of scientific publication on FinTech and Blockchain
 - **Purpose:** Code for Woven technical evaluation (DO NOT use AI during actual evaluation, but these rules are for preparation)
 - **Language:** ALL code, comments, and documentation MUST be in ENGLISH
 
+## CRITICAL: SENIOR-LEVEL SOLUTIONS REQUIRED
+
+**ALL solutions MUST be written at SENIOR SOFTWARE ENGINEER level:**
+
+### Senior-Level Code Characteristics:
+
+1. **Architecture & Design:**
+   - Apply SOLID principles appropriately
+   - Use design patterns when relevant (Factory, Strategy, Repository, etc.)
+   - Consider scalability and maintainability
+   - Think about system architecture implications
+   - Apply microservices concepts if applicable
+
+2. **Code Quality:**
+   - Clean, readable, and well-structured code
+   - Meaningful variable and function names
+   - Appropriate separation of concerns
+   - DRY (Don't Repeat Yourself) principle
+   - Proper error handling and edge cases
+
+3. **Performance & Optimization:**
+   - Consider time/space complexity
+   - Database query optimization (if applicable)
+   - Efficient algorithms and data structures
+   - Caching strategies when relevant
+   - Performance trade-offs explained
+
+4. **Best Practices:**
+   - Follow PSR standards (for PHP)
+   - Proper error handling
+   - Input validation
+   - Security considerations
+   - Testing approach
+
+5. **Professional Experience Integration:**
+   - When applicable, reference experience with:
+     - Spring Framework patterns (if solving Java-like problems)
+     - Database optimization techniques (PostgreSQL experience)
+     - API design patterns (RESTful/GraphQL experience)
+     - Microservices architecture concepts
+     - DevOps practices (if deployment/infrastructure related)
+   - Show understanding of real-world production scenarios
+
+### Example: Senior-Level Approach
+
+**NOT Junior:**
+```php
+// Just make it work
+function solve($input) {
+    // basic code
+}
+```
+
+**SENIOR:**
+```php
+/**
+ * Solves the problem using [algorithm/pattern]
+ * 
+ * Approach: [explain senior-level thinking]
+ * - Considered [alternative approaches] but chose this because [reason]
+ * - Time: O(n), Space: O(1) - optimal for this use case
+ * - Trade-off: [if any]
+ * 
+ * Based on experience with [similar problems in production]
+ */
+function solve($input) {
+    // Senior-level code with:
+    // - Proper validation
+    // - Edge case handling
+    // - Clear structure
+    // - Performance considerations
+}
+```
+
 ## General Principles
+
+### 0. Senior-Level Solutions (MANDATORY)
+
+**ALL solutions must reflect Senior Software Engineer level:**
+
+- **Architectural thinking:** Consider system design, scalability, maintainability
+- **Production-ready mindset:** Think about real-world scenarios, edge cases, error handling
+- **Performance awareness:** Consider time/space complexity, optimization opportunities
+- **Best practices:** Apply SOLID, design patterns, clean code principles
+- **Professional experience:** When relevant, reference:
+  - Database optimization (PostgreSQL experience)
+  - API design patterns (RESTful/GraphQL)
+  - Microservices architecture
+  - DevOps practices
+  - System integration challenges
+
+**Even in STEP 1 (basic solution), code should show senior-level thinking:**
+- Proper structure and organization
+- Clear naming conventions
+- Basic error handling
+- Comments showing architectural considerations
 
 ### 1. Iterative and Natural Development
 - **ALWAYS** show code evolution step by step
@@ -124,6 +804,11 @@
 - Small, focused functions
 - Appropriate edge case handling
 - Performance consideration when relevant
+- Apply SOLID principles when applicable
+- Use design patterns when appropriate
+- Consider database optimization (PostgreSQL experience)
+- Think about API design patterns (RESTful/GraphQL experience)
+- Microservices architecture concepts when relevant
 - But NOT perfect from first attempt - show evolution
 
 ### 3. Human and Natural Comments

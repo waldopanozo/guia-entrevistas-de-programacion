@@ -29,6 +29,62 @@ VanHack se ha asociado con **Woven** para proporcionar un proceso de entrevista 
 
 ---
 
+## Información del Assessment (Desde la Plataforma)
+
+### Estructura del Work Simulation
+
+**Total de Challenges:** 3 challenges
+- Representados por puntos en el sidebar izquierdo
+- Debes intentar cada challenge antes de poder enviar
+
+**Tiempo Total:** 2 días (48 horas)
+- El timer comienza cuando haces clic en "Start The Work Simulation"
+- No se detiene hasta que envíes o se alcance el límite
+- Visible en la esquina inferior izquierda
+- Cambia de color cuando el tiempo se agota
+
+### Challenges Específicos
+
+1. **Debugging a problem with limited information**
+   - ⏱️ Límite de tiempo: 35 minutos
+   - 💻 Lenguaje disponible: PHP
+   - 📝 Tipo: Escenario de debugging
+
+2. **Check which pages users are authorized to access**
+   - ⏱️ Límite de tiempo: 45 minutos
+   - 💻 Lenguaje disponible: PHP
+   - 📝 Tipo: Escenario de código (autorización)
+
+3. **Describe the basic steps in deploying a single page app with a cloud service**
+   - ⏱️ Límite de tiempo: 20 minutos
+   - 💻 Lenguaje disponible: Free Text (texto libre)
+   - 📝 Tipo: Descripción escrita
+
+### Puntos Importantes del Assessment
+
+✅ **Crédito Parcial Extenso:**
+- Hay crédito parcial extenso en todos los escenarios
+- **Muestra tu trabajo** - explica tu proceso
+- **Envía cualquier progreso** que hagas, incluso si no está completo
+
+✅ **Timers Individuales:**
+- Cada escenario tiene su propio límite de tiempo
+- Se te notificará antes de comenzar cualquier challenge con timer
+- Los challenges son independientes - puedes trabajar en ellos en cualquier orden
+
+✅ **Recomendaciones de Tiempo:**
+- Configura un timer para 47 horas cuando empieces (te alertará cuando tengas 1 hora restante)
+- Configura timers individuales para cada escenario según sus límites
+- Puedes tomar descansos entre escenarios, pero el timer total sigue corriendo
+
+⚠️ **Antes de Empezar:**
+- Lee la guía de preparación completamente
+- Configura tu entorno según la guía
+- **NO hagas clic en "Start The Work Simulation" hasta estar completamente preparado**
+- Lee todas las instrucciones antes de comenzar
+
+---
+
 ## Proceso de Evaluación (3 Pasos)
 
 ### 1. Preparación (Prepare)
@@ -49,18 +105,38 @@ VanHack se ha asociado con **Woven** para proporcionar un proceso de entrevista 
 ### 2. Completar Escenarios (Complete Scenarios)
 **⏱️ Tiempo total: 48 horas para completar todos los escenarios**
 
+**⚠️ IMPORTANTE SOBRE EL TIMER:**
+- El timer de 48 horas **comienza cuando haces clic en "Start The Work Simulation"** en el primer challenge
+- El timer **NO se detiene** hasta que envíes el work simulation o se alcance el límite
+- Puedes pausar entre challenges, pero el reloj total sigue corriendo
+- El tiempo restante se muestra en la **esquina inferior izquierda** y cambia de color cuando se agota
+- **DEBES intentar cada challenge antes de poder enviar** el work simulation completo
+
 **Escenarios específicos:**
-1. **Debugging a problem with limited information** - 35 minutos
-2. **Check which pages users are authorized to access** - 45 minutos (escenario de código)
-3. **Describe the basic steps in deploying a single page app with a cloud service** - 20 minutos
+1. **Debugging a problem with limited information**
+   - ⏱️ **35 minutos** (timer individual)
+   - 💻 **Lenguaje:** PHP
+   - 📝 Tipo: Escenario de debugging
+
+2. **Check which pages users are authorized to access**
+   - ⏱️ **45 minutos** (timer individual)
+   - 💻 **Lenguaje:** PHP
+   - 📝 Tipo: Escenario de código (autorización)
+
+3. **Describe the basic steps in deploying a single page app with a cloud service**
+   - ⏱️ **20 minutos** (timer individual)
+   - 💻 **Lenguaje:** Free Text (texto libre)
+   - 📝 Tipo: Descripción escrita
 
 **Características:**
 - Escenarios que se asemejan a problemas reales que encontrarías en el trabajo en VanHack
 - Trabajarás en problemas prácticos de backend
 - Se evaluará tu enfoque de resolución de problemas
 - Se observará tu proceso de pensamiento
-- Puedes tomar descansos entre escenarios
+- Puedes tomar descansos entre escenarios (pero el timer total sigue corriendo)
+- **✅ Hay crédito parcial extenso** - muestra tu trabajo y envía cualquier progreso que hagas
 - **IMPORTANTE:** Configura una alarma a las 47 horas para recordar que tienes 1 hora restante
+- **IMPORTANTE:** Configura timers individuales para cada escenario según sus límites
 
 **Preparación:**
 - [ ] Tener un entorno de desarrollo listo (aunque uses el editor online)
@@ -69,12 +145,16 @@ VanHack se ha asociado con **Woven** para proporcionar un proceso de entrevista 
 - [ ] Preparar ejemplos de código limpio y bien estructurado
 
 **Durante la evaluación:**
-- [ ] Leer cuidadosamente cada escenario
+- [ ] Leer cuidadosamente cada escenario **ANTES de empezar el timer**
+- [ ] Leer las instrucciones completas antes de hacer clic en "Start The Work Simulation"
 - [ ] Clarificar requisitos si es necesario
 - [ ] Explicar tu proceso de pensamiento (si hay opción de comentarios)
 - [ ] Considerar casos edge y manejo de errores
 - [ ] Escribir código limpio y mantenible
-- [ ] Optimizar cuando sea posible
+- [ ] **Mostrar tu trabajo** - hay crédito parcial extenso
+- [ ] **Enviar cualquier progreso** que hagas, incluso si no está completo
+- [ ] Optimizar cuando sea posible, pero no prematuramente
+- [ ] **Intentar cada challenge** antes de enviar (requerido)
 
 ### 3. Obtener Feedback Detallado (Get Detailed Feedback)
 
@@ -205,9 +285,16 @@ VanHack se ha asociado con **Woven** para proporcionar un proceso de entrevista 
 - [ ] Dejar tiempo al final para revisar y pulir respuestas
 
 **Límites individuales:**
-- Escenario 1 (Debugging): 35 minutos
-- Escenario 2 (Autorización): 45 minutos
-- Escenario 3 (Deployment): 20 minutos
+- Escenario 1 (Debugging): 35 minutos ⏱️
+- Escenario 2 (Autorización): 45 minutos ⏱️
+- Escenario 3 (Deployment): 20 minutos ⏱️
+
+**⚠️ CRÍTICO - Gestión de Tiempo:**
+- Cada escenario tiene su **propio timer individual** que se ejecuta cuando empiezas ese challenge
+- El timer total de 48 horas corre **continuamente** desde que empiezas el primer challenge
+- **Se te notificará antes de comenzar cualquier challenge con timer**
+- Los challenges son **independientes** - no necesitas completar uno para avanzar en otros
+- **Recomendación:** Configura timers externos para cada escenario además del timer de la plataforma
 
 ---
 
@@ -303,12 +390,15 @@ VanHack se ha asociado con **Woven** para proporcionar un proceso de entrevista 
 
 ### Preparación del Entorno
 - [ ] Leído guía de preparación de Woven **completamente** (especialmente partes en negrita)
+- [ ] Leído todas las instrucciones del assessment **antes de hacer clic en "Start"**
 - [ ] Probado editor online **Qualified** en ambiente de práctica (30-60 minutos)
 - [ ] Revisado conceptos clave (30-60 minutos)
 - [ ] Verificado conexión a internet estable
 - [ ] Preparado espacio de trabajo sin distracciones
 - [ ] Tener documentación a mano (StackOverflow, blogs, documentación oficial permitidos)
-- [ ] Configurado alarma a las 47 horas
+- [ ] **Configurado alarma a las 47 horas** (para recordar 1 hora restante)
+- [ ] **Configurado timers individuales** para cada escenario (35 min, 45 min, 20 min)
+- [ ] Preparado para mostrar trabajo y enviar progreso parcial (hay crédito parcial)
 
 ### Mental
 - [ ] Descansado bien
@@ -335,11 +425,24 @@ VanHack se ha asociado con **Woven** para proporcionar un proceso de entrevista 
 
 Woven usa la plataforma **Qualified** para entregar los escenarios.
 
+### Interfaz de la Plataforma
+
+**Elementos clave:**
+- **Sidebar izquierdo:** 3 puntos representan los 3 challenges (navegables)
+- **Timer:** Tiempo restante visible en la esquina inferior izquierda
+  - Cambia de color cuando el tiempo se está agotando
+  - Puedes alternar para ver tiempo restante
+- **Challenges:** Debes intentar cada uno antes de poder enviar
+- **Notificaciones:** Se te notificará antes de comenzar cualquier challenge con timer
+
 **Preparación recomendada:**
+- [ ] Leer la guía de preparación de Woven **completamente** antes de empezar
+- [ ] Configurar tu entorno según la guía de preparación
 - [ ] Leer la guía detallada de Qualified (incluso si ya la has usado antes)
-- [ ] Probar el entorno de codificación/escritura
-- [ ] Familiarizarse con la interfaz
+- [ ] Probar el entorno de codificación/escritura en el ambiente de práctica
+- [ ] Familiarizarse con la interfaz y navegación
 - [ ] Practicar escribir código en el editor online
+- [ ] **NO hacer clic en "Start The Work Simulation" hasta estar completamente preparado**
 
 ---
 
